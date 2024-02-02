@@ -19,6 +19,13 @@ class FrenchDeck:
     def __getitem__(self, position):
         return self.cards[position]
 
+    def __repr__(self):
+        """ Defining repr() & str() methods to just see the difference between them """
+        return f"FrenchDeck()"
+
+    def __str__(self):
+        return f"FrenchDeck({self.cards})"
+
     def rank(self, card):
         rank_value = FrenchDeck.ranks.index(card.rank)
         return rank_value * len(self.suit_values) + self.suit_values[card.suit]
