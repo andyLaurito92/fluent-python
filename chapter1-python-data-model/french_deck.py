@@ -24,7 +24,7 @@ class FrenchDeck:
         return f"FrenchDeck()"
 
     def __str__(self):
-        return f"FrenchDeck({self.cards})"
+        return f"FrenchDeck({self.cards!s})"
 
     def rank(self, card):
         rank_value = FrenchDeck.ranks.index(card.rank)
