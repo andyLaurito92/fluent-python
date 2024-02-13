@@ -163,7 +163,8 @@ Special methods __imul__ & __iadd__ allow the in-place multiplication/addition o
 
 When __imul/iadd__ are implemented, a += b is in place, but if they are not, the operation a += b equals a = a + b where a + b generates a new reference to a new object
 
-NOTE: 
+NOTE: str is an exception to the above bc string building with += in loops is so common in real codebases that Cpython is optimized for this use case
+Instances of str are allocated in memory with extra room, so that concatenation does not require copying the whole string everytime
 
 """
 l = [1, 2, 3]
@@ -178,3 +179,23 @@ id(t)
 t *= 2
 t # tuple is (1 2 3 1 2 3), but the reference is a new one
 id(t)
+
+"""
+
+pythontutor.com --> Super nice tool for seeing what's happening in each executed instruction in a python script
+
+"""
+
+
+""""
+list.sort vs sorted built-in function
+"""
+
+unordered_list = [-3, 9, -12, 8, 1, 4, 2023, -2020]
+
+my_new_sorted_list = sorted(unordered_list)
+print(f"In contrast of list.sort, sorted returns a new sequence with the sorted list. The original list reamins unmodified. Sorted: {my_new_sorted_list}, original: {unordered_list}")
+
+# Does a sort in place and returns None as python ideomatic convention (all methods that modify the instance received by parameter should return None)
+res = unordered_list.sort()
+print(f"Result of applying in-place sort: {res}, original list now is: {unordered_list}")
