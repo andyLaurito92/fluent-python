@@ -186,16 +186,21 @@ pythontutor.com --> Super nice tool for seeing what's happening in each executed
 
 """
 
-
-""""
-list.sort vs sorted built-in function
+"""
+Generator expresssions vs lists
 """
 
-unordered_list = [-3, 9, -12, 8, 1, 4, 2023, -2020]
+tshirt_colors = ["blue", "white", "green", "yellow", "black"]
+tshirt_size = ["M", "S", "L"] 
 
-my_new_sorted_list = sorted(unordered_list)
-print(f"In contrast of list.sort, sorted returns a new sequence with the sorted list. The original list reamins unmodified. Sorted: {my_new_sorted_list}, original: {unordered_list}")
+# If we do a list comprehension for generating tshirt_colors per tshirt_size, we are generating all the 5 * 3 elements in memory
+all_values = [ (color, size) for color in tshirt_colors for size in tshirt_size ]
+for element in all_values:
+    print(element)
 
-# Does a sort in place and returns None as python ideomatic convention (all methods that modify the instance received by parameter should return None)
-res = unordered_list.sort()
-print(f"Result of applying in-place sort: {res}, original list now is: {unordered_list}")
+
+# Instead of creating all elements for just printing them, what we can do is use a genex (generator expression) which instead just yields 1 element per each time:
+for tshirt in ((c,s) for c in tshirt_colors for s in tshirt_size):
+    print(tshirt)
+
+# The expresion for genex are ( instead of [
