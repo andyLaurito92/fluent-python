@@ -194,13 +194,14 @@ tshirt_colors = ["blue", "white", "green", "yellow", "black"]
 tshirt_size = ["M", "S", "L"] 
 
 # If we do a list comprehension for generating tshirt_colors per tshirt_size, we are generating all the 5 * 3 elements in memory
-all_values = [ (color, size) for color in tshirt_colors for size in tshirt_size ]
-for element in all_values:
+list_with_elements_in_memory = [ (color, size) for color in tshirt_colors for size in tshirt_size ]
+for element in list_with_elements_in_memory:
     print(element)
 
 
+mygenex = ((c,s) for c in tshirt_colors for s in tshirt_size)
 # Instead of creating all elements for just printing them, what we can do is use a genex (generator expression) which instead just yields 1 element per each time:
-for tshirt in ((c,s) for c in tshirt_colors for s in tshirt_size):
+for tshirt in mygenex:
     print(tshirt)
 
 # The expresion for genex are ( instead of [
