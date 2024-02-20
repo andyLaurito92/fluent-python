@@ -65,3 +65,24 @@ dump_set | another_dict
 
 dump_set |= another_dict
 
+"""
+Note: the match/case supports subjets that are mapping objects. Patterns for mappings look like dict literals, but they can match instances of any actual or virtual subclass of collections.abc.Mapping
+
+The above is supper useful for JSONs and databases with semi-structured schemas
+"""
+
+responses = [
+    { "message": "This is an api message", "status": 404, "my_secret_key": "This is my secret key" },
+    { "message": "All good over here", "status": 200, "my_secret_key": "rabbit1123" },
+    { "message": "All good over here", "status": 303, "my_secret_key": "rabbit1123" }
+]
+
+for response in responses:
+    match response:
+        case { "status" : 404 }:
+            print("Ooops!, not found")
+        case { "message" : my_message, "status": 200}:
+            print(f"The message is {my_message}")
+        case { "my_secret_key": the_key }:
+            print(f"The secret key is {the_key}")
+
