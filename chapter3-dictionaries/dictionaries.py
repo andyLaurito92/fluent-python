@@ -86,3 +86,37 @@ for response in responses:
         case { "my_secret_key": the_key }:
             print(f"The secret key is {the_key}")
 
+# We can also do partial matching in dictionaries
+
+response = {"status": 273, "message": "status only know by me", "arg1": "arg only in this version of the api", "always": "I'm always here"}
+
+match response:
+    case { "status":273, **tail}:
+        print(f"My special status that comes with all these key args as well {tail}")
+
+"""
+collections.abc provides the Mapping and MutableMapping interfaces of dict and similar types
+
+
+Note: Remember that the keys of a dictionary in python have to be hashable
+"""
+
+
+"""
+Reminder: An object is hashable <--> it has a hash code which never changes during it's lifetime (needs a __hash__() method)
+and can be compared with other objects __eq__()
+
+Container types are hashable if they are immutable and all contained objects are also hashable
+
+Hash code is guaraneed to be constant only within a python process
+"""
+
+im_hashable = (3, 10, ("hey", "ho"))
+hash(im_hashable)
+
+im_not = (10, ["here", "is", "the problem", "lists are not immutable"])
+hash(im_not)
+
+"""
+User-defined types are hashable by default because their hash code is their id
+"""
