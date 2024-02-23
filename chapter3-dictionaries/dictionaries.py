@@ -120,3 +120,38 @@ hash(im_not)
 """
 User-defined types are hashable by default because their hash code is their id
 """
+
+
+"""
+Duck typing: A way of programming in which an object passed into a function or method supports all method signatures and attributes expected of that object at run time. We don't care about the type
+
+So instead of enforcing types, we just check/assume that the object can handle what is required for the method to be executed
+
+An example of duck typing in python is method update from dictionary
+
+Update checks wether m has a keys method. If it does, assumes it is a mapping. Otherwise, update() falls back to iterating over m, assuming its items are (key, value) pairs
+"""
+
+my_dict = {'a': 3, 'b': 4}
+another_dict = { 'z':8, 'y': 9 }
+
+my_dict.update([('c', 4), ('d', 8)])
+my_dict.update(another_dict)
+
+
+
+"""
+Useful method: d.setdefault(k, default) --> if k in d, return d[k]. else set d[k] = default & return
+"""
+my_dict.setdefault('m', 0) # Assuming we are counting ocurrences
+my_dict['m'] 
+
+
+# Instead of setting the key if it doesn't exist, you can choose on returning a default
+# value instead of raising an error
+
+my_dict.get('h', 29)
+"""
+In the previous line, given that key h doesn't exist, it returns 29 but, as difference as before,
+the value is not returned
+"""
