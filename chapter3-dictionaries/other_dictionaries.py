@@ -108,3 +108,7 @@ dict_vals = mydictionary.values()
 dict_vals
 mydictionary['5'] = 'E'
 dict_vals
+
+# Remove duplicates from list and preserve order in which they appear
+l = ['hola', 'hola', 'chau', 'chau', 'hey', 'hola', 'hey']
+dict.fromkeys(l).keys()
