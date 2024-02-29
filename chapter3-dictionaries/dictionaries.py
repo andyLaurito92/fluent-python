@@ -9,7 +9,7 @@ print(__builtins__.__dict__)
 
 print("Hash tables is how dictionaries are implemented in Python")
 
-print("Other built-in types absed on hash tables are set and frozenset")
+print("Other built-in types based on hash tables are set and frozenset")
 
 from collections import frozenset
 

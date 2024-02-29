@@ -95,3 +95,16 @@ immutable_dictionary['1'] = 3
 
 mydictionary['4'] = 'D'
 immutable_dictionary['4']
+
+
+"""
+Methods .keys(), .values() and .items() of dictionary return a dictionary view which is a dynamic proxy :)
+
+The dictionary view class only implements __len__, __iter__ and __reversed__ special methods and cannot be
+instantiated by the user
+"""
+
+dict_vals = mydictionary.values()
+dict_vals
+mydictionary['5'] = 'E'
+dict_vals
