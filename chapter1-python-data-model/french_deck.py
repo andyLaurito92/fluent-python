@@ -1,6 +1,6 @@
 import collections
 
-# Build a class that is a bundle of attributes and nothing more
+# Build a class that is a bundle of attributes and nothing more. Think of it as a DB record
 Card = collections.namedtuple('Card', ['rank', 'suit'])
 
 class FrenchDeck:
