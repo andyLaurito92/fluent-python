@@ -16,3 +16,10 @@ from collections import deque
 dq = deque(range(10), maxlen=10)
 dq
 dq.rotate(3)
+
+
+"""
+queue provides the syncrhonized (thread-safe) classes SimpleQueue, Queue, LifoQueue and PriorityQueue. These can be used for safe communication
+between threads
+
+"""
