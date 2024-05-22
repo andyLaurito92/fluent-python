@@ -42,6 +42,45 @@ Byte essentials
 
 cafe = bytes('café', 'UTF-8')
 
-# Note how this line returns 99 and not c
+# Note how this line returns 99 and not c. 99 is the ascii representations of c
 cafe[0]
 
+
+
+"""
+Python distribution bundles more than 100 codecs(encoder/decoders) for text to byte conversion and viceversa. Codec examples: 'utf_8', 'latin_1', 'ascii', 'cp1252', 'cp437', 'cp850'. These can be used as arguments in functions like open(), str.encode(), bytes.decode(), and so on.
+
+Note: UTF-8 is the most common codec and the default for Python 3. It's designed to handle all Unicode characters. It's backward compatible with ASCII, meaning that UTF-8 is a superset of ASCII. UTF-8 is the best choice for encoding text files.
+"""
+
+for codec in ['latin_1', 'utf_8', 'utf_16']:
+    print(codec, 'El Niño'.encode(codec), sep='\t')
+
+
+"""
+Unicode exceptions: UnicodeEncodeError (when converting str to binary sequences) and UnicodeDecodeError (when converting binary sequences to str)
+
+If a character is not defined in the target encoding, UnicodeEncodeError is raised.
+"""
+name = "Iñaqui"
+
+print(name.encode('utf_8'))
+
+## UnicodeNcodeError. ñ does't exist in ascii
+print(name.encode('ascii'))
+
+## Replace unkown characters with ?
+name.encode('ascii', errors='replace')
+
+## Ignore unkown characters
+name.encode('ascii', errors='ignore')
+
+"""
+Replace unkown characters with xml reference.  (i.e., a numeric character reference)
+
+When an unencodable character is encountered, it replaces it with its corresponding XML character reference. This reference is in the form of &#NNNN; where NNNN is the decimal Unicode code point of the character.
+
+In the example below, 241 is the decimal Unicode code point for ñ.
+"""
+
+name.encode('ascii', errors='xmlcharrefreplace')
