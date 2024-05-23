@@ -133,7 +133,7 @@ os.stat('cafe.txt').st_size
 
 ## Explore default encodings in OS. This is just to show how many encodings are available in the system
 
-locale.getpreferredencoding()
+locale.getpreferredencoding() ## This is what text file use by default
 sys.stdout.encoding
 
 """
@@ -151,3 +151,32 @@ sys.getfilesystemencoding()
 my_file = open('example.txt', 'w')
 my_file.encoding
 my_file.close()
+
+
+
+"""
+\N{} escape for Unicode literals. Inside curly braces, you can use the Unicode name of the character. This is much better than writing the hexadecimal code point. If the name doesn't exist, python raises SyntaxError
+"""
+
+print('\N{INFINITY}')
+print('\N{CIRCLED NUMBER FORTY TWO}')
+
+"""
+Text normalization: Normalization is the process of transforming text into a canonical (standard) form. This is important because Unicode allows multiple ways to represent the same character. For example, the character é can be represented as a single code point (U+00E9) or as two code points (U+0065 U+0301). Both representations should be treated as the same character.
+
+"""
+
+s1 = 'café'
+s2 = 'cafe\N{COMBINING ACUTE ACCENT}'
+s1, s2
+
+# First string is encoding w/4 unicode characters while second is encoded w/5 unicode characters
+len(s1), len(s2)
+
+"""
+For strings with Unicode characters, len counts each character, not the number of bytes they may occupy in memory.
+"""
+
+s1 == s2
+
+s1.encode('utf_8'), s2.encode('utf_8')
