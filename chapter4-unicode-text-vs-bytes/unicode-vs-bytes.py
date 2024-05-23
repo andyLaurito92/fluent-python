@@ -1,4 +1,7 @@
 import os
+import locale
+import sys
+
 """
 Let's start this unit with some definitions:
 
@@ -126,3 +129,25 @@ fp3.close()
 
 ## Get the number of bytes the file has
 os.stat('cafe.txt').st_size
+
+
+## Explore default encodings in OS. This is just to show how many encodings are available in the system
+
+locale.getpreferredencoding()
+sys.stdout.encoding
+
+"""
+The isatty() method in Python is used to determine if a file descriptor is connected to a terminal (TTY) device. In the context of sys.stdout.isatty(), it checks whether the standard output (stdout) is connected to a terminal.
+
+The isatty() method returns True if the file descriptor is connected to a terminal, and False otherwise. This is useful in scripts and programs to decide whether to produce output that is suitable for a terminal (such as colorized text or interactive prompts) or not.
+"""
+
+sys.stdout.isatty()
+sys.stdin.encoding
+sys.stderr.encoding
+sys.getdefaultencoding()
+sys.getfilesystemencoding()
+
+my_file = open('example.txt', 'w')
+my_file.encoding
+my_file.close()
