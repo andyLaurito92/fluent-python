@@ -180,3 +180,47 @@ For strings with Unicode characters, len counts each character, not the number o
 s1 == s2
 
 s1.encode('utf_8'), s2.encode('utf_8')
+
+
+"""
+How to solve the above problem in order to get what we expect?
+
+unicodedata.normalize() function. This function takes two arguments: the form parameter and the string to normalize. The form parameter specifies the normalization form to use. There are four normalization forms defined in Unicode: NFC, NFD, NFKC, and NFKD.
+
+NFC (Normalization Form Canonical Composition) is the most common normalization form. It composes characters and replaces them with a single code point if possible. This is the form you should use for most text processing tasks.
+"""
+
+from unicodedata import normalize
+len(normalize('NFC', s1)), len(normalize('NFC', s2))
+
+len(normalize('NFD', s1)), len(normalize('NFD', s2))
+
+normalize('NFC', s1) == normalize('NFC', s2)
+
+
+"""
+Utility functions when working w/different languages
+"""
+
+def nfc_equal(str1, str2):
+    return normalize('NFC', str1) == normalize('NFC', str2)
+
+def fold_equal(str1, str2):
+    return (normalize('NFC', str1).casefold() == normalize('NFC', str2).casefold())
+
+s1 == s2
+
+nfc_equal(s1, s2)
+
+nfc_equal('A', 'a')
+
+s3 = 'Straße'
+s4 = 'Strasse'
+
+s3 == s4
+
+nfc_equal(s3, s4)
+
+fold_equal(s3, s4)
+fold_equal(s1, s2)
+fold_equal('A', 'a')
