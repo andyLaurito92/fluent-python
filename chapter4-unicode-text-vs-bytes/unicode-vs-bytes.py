@@ -1,3 +1,4 @@
+import os
 """
 Let's start this unit with some definitions:
 
@@ -122,3 +123,6 @@ fp2.close()
 fp3 = open('cafe.txt', 'rb')
 ## play w/it in the console
 fp3.close()
+
+## Get the number of bytes the file has
+os.stat('cafe.txt').st_size
