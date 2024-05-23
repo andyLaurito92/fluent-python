@@ -84,3 +84,41 @@ In the example below, 241 is the decimal Unicode code point for ñ.
 """
 
 name.encode('ascii', errors='xmlcharrefreplace')
+
+
+"""
+If a byte sequence is not valid in the target decoding, UnicodeDecodeError is raised.
+"""
+
+octets = b'Montr\xe9al'
+
+octets.decode('cp1252')
+
+## This wrong codec produces a "gremlin" (a character that doesn't exist in the target encoding but it's still decoded and an error is not raised)
+octets.decode('iso8859_7')
+
+## Raises an error
+octets.decode('utf_8')
+
+## Replace any character that can't be decoded with a ?
+octets.decode('utf_8', errors='replace')
+
+from weird_encoding import *
+
+# Example of bug
+bytes_written = open('cafe.txt', 'w', encoding='utf_8').write('café')
+
+res = open('cafe.txt', encoding='ascii', errors='replace').read()
+res
+
+file_descriptor = open('cafe.txt', 'w', encoding='utf_8')
+## play w/it in the console
+file_descriptor.close()
+
+fp2 = open('cafe.txt')
+## play w/it in the console
+fp2.close()
+
+fp3 = open('cafe.txt', 'rb')
+## play w/it in the console
+fp3.close()
