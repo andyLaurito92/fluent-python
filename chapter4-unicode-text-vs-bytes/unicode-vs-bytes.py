@@ -277,3 +277,20 @@ def shave_marks_latin(txt):
             latin_base = c in string.ascii_letters
     shaved = ''.join(keepers)
     return normalize('NFC', shaved)
+
+# The below maps are used to replace characters that are not in the ascii table by using the translate() method
+single_map = str.maketrans("""‚ƒ„†ˆ‹‘’“”•–—˜›""", """'f"*^<''""---~>""")
+translation_map = str.maketrans({'Œ': 'OE', 'œ': 'oe', 'æ': 'ae', 'Æ': 'AE', 'ß': 'ss', 'ſ': 'ss'})
+translation_map.update(single_map)
+
+def dewinize(txt):
+    """Replace Win1252 symbols with ASCII chars or sequences"""
+    return txt.translate(translation_map)
+
+def asciize(txt):
+    no_marks = shave_marks_latin(dewinize(txt))
+    return unicodedata.normalize('NFKC', no_marks)
+
+text = '“Herr Voß: • ½ cup of Œtker™ caffè latte • bowl of açaí.”'
+dewinize(text)
+asciize(text)
