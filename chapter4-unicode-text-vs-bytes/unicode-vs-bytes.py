@@ -190,7 +190,7 @@ unicodedata.normalize() function. This function takes two arguments: the form pa
 NFC (Normalization Form Canonical Composition) is the most common normalization form. It composes characters and replaces them with a single code point if possible. This is the form you should use for most text processing tasks.
 """
 
-from unicodedata import normalize
+from unicodedata import normalize, combining
 len(normalize('NFC', s1)), len(normalize('NFC', s2))
 
 len(normalize('NFD', s1)), len(normalize('NFD', s2))
@@ -224,3 +224,56 @@ nfc_equal(s3, s4)
 fold_equal(s3, s4)
 fold_equal(s1, s2)
 fold_equal('A', 'a')
+
+
+"""
+To better understand normalize forms in unicode visit https://unicode.org/reports/tr15/#Norm_Forms
+
+"""
+
+
+"""
+Taking out diacritics (accents, cedillas, etc) from characters. This is useful when you want to compare strings without considering diacritics. For example, you may want to treat café and cafe as equal strings.
+
+The unicodedata module provides the normalize() function to remove diacritics from characters. The function takes two arguments: the form parameter and the string to normalize. The form parameter specifies the normalization form to use. There are four normalization forms defined in Unicode: NFC, NFD, NFKC, and NFKD.
+
+The combining method from the unicodedata module returns a non-zero value if the character is a combining character. Combining characters are characters that are combined with the preceding character to produce a new character. Diacritics are examples of combining characters.
+"""
+
+def shave_marks(txt):
+    """Remove all diacritic marks"""
+    norm_txt = normalize('NFD', txt)
+    haved = ''.join(c for c in norm_txt if not combining(c))
+    return normalize('NFC', shaved)
+
+order = '“Herr Voß: • ½ cup of Œtker™ caffè latte • bowl of açaí.”'
+shave_marks(order)
+
+greeks = 'Ζέφυρος, Zéfiro'
+shave_marks(greeks)
+
+"""
+Often the reason to remove diacritics is to change lating text to purse ASCII, but shave_marks also changes non-latin characters. It makes sense to analyze each case.
+
+"""
+import string
+
+
+"""
+Note: combining characters in unicode seem to come after the base character, example: in café, the unicode represntation is ('c', 0)
+'c' 'a' 'f' 'f' 'e' (''̀', 230), where the last tuple represents the unicode combining character for é
+
+"""
+def shave_marks_latin(txt):
+    """Remove all diacritic marks from Latin base characters"""
+    norm_txt = normalize('NFD', txt)
+    latin_base = False
+    keepers = []
+    for c in norm_txt:
+        if combining(c) and latin_base:
+            continue # ignore diacritic on Latin base char and continue with next char
+        keepers.append(c)
+        if not combining(c):
+            latin_base = c in string.ascii_letters
+    shaved = ''.join(keepers)
+    return normalize('NFC', shaved)
