@@ -49,3 +49,36 @@ print(f"Type hints: {typing.get_type_hints(TypedCoordinate)}")
 
 bad_example = TypedCoordinate(-34.61, 'wrong')
 print(bad_example)  # TypedCoordinate(latitude=-34.61, longitude='wrong')
+
+# We can provide keyword arguments to the constructor
+sao_pablo = TypedCoordinate(latitude=-23.55,longitude=-46.63)
+sao_pablo == buenos_aires_typed  # False
+
+
+"""
+Let's use NamedTuple to define a new class. Valid for Python 3.6+
+"""
+
+class AnotherCoordinate(typing.NamedTuple):
+    latitude: float
+    longitude: float
+
+    def __str__(self):
+        ns = 'NS'[self.latitude < 0]
+        ew = 'EW'[self.longitude < 0]
+        return f"{abs(self.latitude):.1f}°{ns}, {abs(self.longitude):.1f}°{ew}"
+        
+
+paris = AnotherCoordinate(48.85, 2.35)
+print(paris)  # 48.9°N, 2.4°E
+print(paris.latitude)  # 48.85
+
+"""
+Note: AnotherCoordinate is not a subclass of NamedTuple.
+"""
+
+try:
+    print(issubclass(AnotherCoordinate, typing.NamedTuple))
+except Exception as e:
+    print("issubclass throwed the following error: ", e)
+
