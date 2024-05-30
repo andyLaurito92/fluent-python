@@ -90,6 +90,9 @@ Let's now use the dataclass decorator to create a class with the same attributes
 
 from dataclasses import dataclass
 
+"""
+The frozen parameter makes the class immutable. If you try to change an attribute, it will raise an exception.
+"""
 @dataclass(frozen=True)
 class DataCoordinate:
     latitude: float
@@ -108,3 +111,43 @@ print(berlin == DataCoordinate(52.52, 13.40))  # True
 # Dataclass extends from object while typing.NamedTuple issubclass of tuple
 print(issubclass(AnotherCoordinate, tuple))  # True
 print(issubclass(DataCoordinate, tuple))  # False
+
+
+try: 
+    berlin.latitude = 52.53  # AttributeError: can't set attribute
+except Exception as e:
+    print("Error when trying to assign latitude to berlin: ", e)
+
+# Get type hints of a class
+print(typing.get_type_hints(DataCoordinate))  # {'latitude': <class 'float'>, '
+
+"""
+We can get dictionaries from the data classes built above
+"""
+
+import dataclasses
+dataclasses.asdict(berlin)  # {'latitude': 52.52, 'longitude': 13.4}
+
+buenos_aires_dict = buenos_aires._asdict()  # {'latitude': -34.61, 'longitude': -58.38}
+
+
+"""
+Get field names & default values
+"""
+dataclasses.fields(DataCoordinate)
+
+
+"""
+You can create a new instance with some values changed from an existing one. This probably makes sense when the dataclass has many attributes and you're just interested in updating some of them.
+"""
+
+new_berlin = dataclasses.replace(berlin, latitude=43.53)  # DataCoordinate(latitude=52.53, longitude=13.4)
+
+print(new_berlin == berlin)  # False
+
+
+"""
+Because namedtuple & typing.NamedTuple are subclass of tuple, you can use them as keys in a dictionary.
+"""
+
+print(f"Latitude: {buenos_aires[0]}")
