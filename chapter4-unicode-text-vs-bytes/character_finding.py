@@ -26,3 +26,8 @@ if __name__ == "__main__":
         sys.exit(1)
     find_emoji_containing(words)
    
+string_multiple_lines = ("hey how are you " "this is being "
+                         "concatenated with the previous string "
+                         "super cool, huh? "
+                         "It's a way for not having to write the backslash n")
+print(string_multiple_lines)
