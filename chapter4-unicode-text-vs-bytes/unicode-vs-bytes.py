@@ -294,3 +294,15 @@ def asciize(txt):
 text = '“Herr Voß: • ½ cup of Œtker™ caffè latte • bowl of açaí.”'
 dewinize(text)
 asciize(text)
+
+
+print(f"Listing strings: {os.listdir('.')}")
+
+print(f"Listing bytes: {os.listdir(b'.')}")
+
+"""
+In case of weird name in paths, you can use os.fsencode() to convert a string to bytes. This is useful when you need to pass a path to a function that expects bytes. There's also os.fsdecode() to convert bytes to string.
+"""
+
+import os
+os.fsencode('café.txt')
