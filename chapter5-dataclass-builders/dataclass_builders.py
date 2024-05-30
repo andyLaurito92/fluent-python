@@ -82,3 +82,29 @@ try:
 except Exception as e:
     print("issubclass throwed the following error: ", e)
 
+
+
+"""
+Let's now use the dataclass decorator to create a class with the same attributes as the NamedTuple above.
+"""
+
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class DataCoordinate:
+    latitude: float
+    longitude: float
+
+    def __str__(self):
+        ns = 'NS'[self.latitude < 0]
+        ew = 'EW'[self.longitude < 0]
+        return f"{abs(self.latitude):.1f}°{ns}, {abs(self.longitude):.1f}°{ew}"
+
+berlin = DataCoordinate(52.52, 13.40)
+print(berlin)  # 52.5°N, 13.4°E
+
+print(berlin == DataCoordinate(52.52, 13.40))  # True
+
+# Dataclass extends from object while typing.NamedTuple issubclass of tuple
+print(issubclass(AnotherCoordinate, tuple))  # True
+print(issubclass(DataCoordinate, tuple))  # False
