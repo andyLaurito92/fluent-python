@@ -66,3 +66,49 @@ try:
     print(hash(buenosaires_unhashable))
 except Exception as e:
     print("When trying to hash a dataclass which can be mutable (frozen = False), then an exception is thrown ", e)
+
+
+"""
+The code below is a bug in most cases:
+
+The default value of the collection attribute is a mutable object (list). This means that all instances of MutableField share the same list object. If you change the list in one instance, it will change in all instances, which is probably not what you want.
+"""
+
+try: 
+    @dataclass
+    class MutableField:
+        name: str
+        collection: list = []
+except Exception as e:
+    print("When trying to define a mutable field in a dataclass, Python throws an exception: ", e)
+
+"""
+Correct way of implementing a mutable field in a dataclass
+"""
+
+from dataclasses import field
+
+@dataclass
+class MutableField:
+    name: str
+    collection: list = field(default_factory=list)
+
+mutable = MutableField('mutable', [1, 2, 3])
+
+print("Showing problem with having a mutable field in a dataclass")
+
+@dataclass
+class BuggyClass:
+    name: str
+    collection = []
+
+user1 = BuggyClass('user1')
+user2 = BuggyClass('user2')
+
+print(f"User 1 adds something new to the collection")
+user1.collection.append(1)
+print(f"And nos user 2 list look like this :) -> {user2.collection}")
+
+"""
+Again, the problem above is that we are sharing the same instance of list across all instances of the class. The correct way of doing this is by using the field function from the dataclasses module.
+"""
