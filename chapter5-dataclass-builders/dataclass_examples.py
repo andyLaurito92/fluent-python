@@ -112,3 +112,97 @@ print(f"And nos user 2 list look like this :) -> {user2.collection}")
 """
 Again, the problem above is that we are sharing the same instance of list across all instances of the class. The correct way of doing this is by using the field function from the dataclasses module.
 """
+
+"""
+Field has other parameters, such as:
+- default: The default value of the field.
+- default_factory: A function that returns the default value of the field.
+- repr: If True, the field is included in the string returned by the __repr__() method. Default is True.
+- hash: If True, the field is included in the hash of the object. Default is True.
+- init: If True, the field is included as a parameter in the __init__() method. Default is True.
+- compare: If True, the field is included in comparison methods (__eq__(), __gt__(), etc.). Default is True.
+- metadata: A dictionary with metadata about the field.
+"""
+
+@dataclass
+class Student:
+    name: str
+    age: int = field(default=20, repr=False) # age is not included in the repr
+    grades: list = field(default_factory=list, metadata={'unit': 'grades'})
+
+
+student = Student('John')
+print(student)
+
+
+"""
+In case a more complex init is needed, you can override the __post_init__ method
+"""
+
+@dataclass
+class BachelorStudent(Student):
+    degree: str = 'science'
+    valid_degrees = ['science', 'arts']
+
+    def __post_init__(self):
+        self.degree = self.degree.lower()
+        if self.degree not in self.valid_degrees:
+            raise ValueError(f'Degree must be one of {self.valid_degrees}')
+
+try: 
+    engeneering_student = BachelorStudent('John', degree='Engineer')
+except Exception as e:
+    print("When trying to instantiate a BachelorStudent with an invalid degree, Python throws an exception: ", e)
+
+valid_student = BachelorStudent(name='John', age=27, degree='arts')
+print(f"Valid student: {valid_student}. Age is: {valid_student.age}")
+
+
+"""
+Be aware of the following problem
+
+Let's assume that we want to collect the movies watched by us
+"""
+
+@dataclass
+class Movies:
+    watched = set()
+
+my_movies = Movies()
+my_movies.watched.add('The Godfather')
+my_movies.watched.add('The Godfather II')
+
+your_movies = Movies()
+your_movies.watched.add('The Shawshank Redemption')
+your_movies.watched.add('The Dark Knight')
+
+print(f"Watched movies by us: {my_movies.watched}")
+
+
+"""
+The above dataclass wouldn't pass mypy checks. In particular it throws the following error:
+
+dataclass_examples.py:169: error: Need type annotation for "watched" (hint: "watched: set[<type>] = ...")  [var-annotated]
+
+If we add a type to the watched attribute, the class instance would become a instance variable!
+"""
+
+from typing import ClassVar
+@dataclass
+class MoviesTyped:
+    #watched: set = field(default_factory=set) # If you try without the default_factory, it will throw an error
+    watched: ClassVar[set[str]] = set()
+
+my_movies = MoviesTyped()
+my_movies.watched.add('The Godfather')
+my_movies.watched.add('The Godfather II')
+
+your_movies = MoviesTyped()
+your_movies.watched.add('The Shawshank Redemption')
+your_movies.watched.add('The Dark Knight')
+
+print(f"Watched movies by us: {my_movies.watched}")
+
+"""
+If we want to have a typed class variable, we can use the ClassVar type hint. This way, the watched attribute is shared among all instances of the class. This was introduced in PEP 526 (https://peps.python.org/pep-0526/)
+"""
