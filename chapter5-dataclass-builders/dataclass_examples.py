@@ -206,3 +206,36 @@ print(f"Watched movies by us: {my_movies.watched}")
 """
 If we want to have a typed class variable, we can use the ClassVar type hint. This way, the watched attribute is shared among all instances of the class. This was introduced in PEP 526 (https://peps.python.org/pep-0526/)
 """
+
+"""
+The are only 2 places were dataclasses care about typehints:
+1. If an atribute is a ClassVar, then an instance field will not be generated
+2. When declaring init-only variables. See https://docs.python.org/3/library/dataclasses.html#init-only-variables
+"""
+
+
+"""
+Bigger example on dataclasses
+"""
+
+from enum import Enum, auto
+from datetime import date
+from typing import Optional
+
+class ResourceType(Enum):
+    VIDEO = 'video'
+    IMAGE = 'image'
+    TEXT = 'text'
+
+@dataclass
+class Resource:
+    identifier: str
+    type: ResourceType = ResourceType.TEXT
+    tags: list = field(default_factory=list)
+    date: Optional[date] = None
+
+    def __repr__(self):
+        return f'Resource(\n identifier={self.identifier!r}, \n type={self.type!r}, \n tags={self.tags!r}, \n date={self.date!r}\n)'
+
+my_resource = Resource('123', ResourceType.VIDEO, ['python', 'dataclasses'], date(2021, 1, 1))
+print(my_resource)
