@@ -239,3 +239,12 @@ class Resource:
 
 my_resource = Resource('123', ResourceType.VIDEO, ['python', 'dataclasses'], date(2021, 1, 1))
 print(my_resource)
+
+
+"""
+Further reading:
+1. https://github.com/dabeaz/cluegen
+2. https://github.com/python-attrs/attrs
+3. https://peps.python.org/pep-0557/#id47
+
+"""
