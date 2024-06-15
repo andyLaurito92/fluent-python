@@ -1,5 +1,7 @@
 """
 In python we have class weakref for creating objects that don't increase the counter of references. This is useful for creating caches, because you don't want the cache object to be kept in memory if it's not being used.
+
+More info:http://pymotw.com/3/weakref/ 
 """
 
 
