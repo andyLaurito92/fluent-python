@@ -3,6 +3,8 @@ This deadlock happens in Cpython because how the garbage collector works.
 When the del statement is called on c, given that the reference count of c get's to 0
 Cpython tries to delete the object immediately. There are other interpreters that don't do this
 making this deadlock something evitable.
+
+Example coming from: https://emptysqua.re/blog/pypy-garbage-collection-and-a-deadlock/
 """
 
 import threading
