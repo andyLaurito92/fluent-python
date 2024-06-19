@@ -69,3 +69,11 @@ List of functions that we have in operator module
 """
 import operator
 print(' '.join([fun for fun in dir(operator) if not fun.startswith('__')]))
+
+from functools import partial
+
+from operator import mul
+
+triple = partial(mul, 3)
+
+print(triple(7))
