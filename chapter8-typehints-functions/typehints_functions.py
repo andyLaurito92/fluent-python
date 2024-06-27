@@ -20,3 +20,14 @@ def show_count(count: int, word: str,
     if plural is not None:
         return f"{count_str} {plural}"
     return f"{count_str} {word}s"
+
+
+
+"""
+Since Python 3.10 you can use the | operator to define a union type
+"""
+def testing_union_typing(val: int | None) -> int:
+    return val if val else 0
+
+
+testing_union_typing(3)
