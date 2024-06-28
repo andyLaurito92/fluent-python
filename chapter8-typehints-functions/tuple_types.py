@@ -40,3 +40,16 @@ def geo_hash2(lat_lon: Coordinate) -> str:
 shanghai = Coordinate(31.2304, 121.4737)
 
 print(geo_hash2(shanghai))
+
+
+"""
+3. Tuples as immutable sequences -> Use tuple[T, ...]
+
+Note: There is no way to specify fields of different types for
+tuples of arbitrary length. 
+"""
+
+def sum_immutable_sequence(numbers: tuple[int, ...]) -> int:
+    return sum(numbers)
+
+print(sum_immutable_sequence((1, 2, 3, 4, 5)))
