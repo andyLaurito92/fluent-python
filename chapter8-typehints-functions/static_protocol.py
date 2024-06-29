@@ -16,6 +16,7 @@ from typing import Iterable, TypeVar, Protocol
 
 T = TypeVar('T')
 
+# This raises an error in Mypy
 def top_n1(data: Iterable[T], n: int) -> list[T]:
     result = sorted(data, reverse=True)
     return result[:n]
@@ -29,8 +30,27 @@ so we need to define a protocol that enforces this behavior
 class SupportsLessThan(Protocol):
     def __lt__(self, other: object) -> bool: ...
 
-T2 = TypeVar('T', bound=SupportsLessThan)
+T2 = TypeVar('T2', bound=SupportsLessThan)
 
 def top_n2(data: Iterable[T2], n: int) -> list[T2]:
     result = sorted(data, reverse=True)
     return result[:n]
+
+
+"""
+Typing a function that applies __mul__ to an object
+"""
+
+T3 = TypeVar('T3')
+class SupportsMultiply(Protocol):
+    def __mul__(self: T3, number: int) -> T3: ...
+
+T4 = TypeVar('T4', bound=SupportsMultiply)
+
+def double(x: T4) -> T4:
+    return x * 2
+
+
+print(double(2))
+print(double(2.0))
+print(double([1, 2, 3]))
