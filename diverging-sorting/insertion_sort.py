@@ -11,7 +11,7 @@ But in essence it works like this:
 """
 
 # We define insertion sort
-from collections.abc import Sequence
+from collections.abc import MutableSequence
 from typing import TypeVar, Iterable, Any, NoReturn, Protocol, Callable
 from random import shuffle
 
@@ -22,7 +22,7 @@ T = TypeVar('T', bound=SupportsLessThan)
 
 # Note that we need myIterable to be a sequence because we need
 # the argument to have method len implemented
-def my_insertion_sort(myIterable: Sequence[T]) -> NoReturn:
+def my_insertion_sort(myIterable: MutableSequence[T]) -> None:
     for i in range(1, len(myIterable)):
         elem = myIterable[i]
         j = i
@@ -34,8 +34,8 @@ def my_insertion_sort(myIterable: Sequence[T]) -> NoReturn:
             j = 0
         myIterable[j] = elem
 
-a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-b = [chr(i) for i in range(65, 91)]
+a: list[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+b: list[str] = [chr(i) for i in range(65, 91)]
 
 lists_to_sort = [a, b]
 for list_to_sort in lists_to_sort:
@@ -53,7 +53,7 @@ that returns a unique value, and not comprabale like Java?
 The answer is in the below code:
 """
 
-def schawartzian_transform(myseq: Sequence[T], key:Callable[[Any], Any]) -> list[T]:
+def schawartzian_transform(myseq: MutableSequence[T], key:Callable[[Any], Any]) -> list[T]:
     # We decorate the list by using the key function received + the index
     decorated_list = [(key(myseq[i]), i, myseq[i]) for i in range(0, len(myseq))]
 
