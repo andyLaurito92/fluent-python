@@ -44,7 +44,16 @@ print(avg_fun(10))
 print(avg_fun(11))
 print(avg_fun(12))
 
+
 """
 In the above example, series is a free variable of the closure. This means a variable
 that is not bound in the local scope. 
 """
+
+print(avg_fun.__code__.co_varnames) # local variables
+
+print(avg_fun.__code__.co_freevars) # free variables
+
+print(avg_fun.__closure__) # the cells of the free variables
+
+avg_fun.__closure__[0].cell_contents
