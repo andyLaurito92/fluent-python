@@ -41,6 +41,6 @@ the dis module
 
 from dis import dis
 
-print(dis(myfun1))
-print(dis(myfun2))
-print(dis(myfun3))
+dis(myfun1)
+dis(myfun2)
+dis(myfun3)

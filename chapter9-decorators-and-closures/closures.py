@@ -1,3 +1,4 @@
+from typing import Callable
 """
 Closures are functions with an extended scope that encompasses nonglobal variables
 referenced in the body of the function but not defined there.
@@ -57,3 +58,70 @@ print(avg_fun.__code__.co_freevars) # free variables
 print(avg_fun.__closure__) # the cells of the free variables
 
 avg_fun.__closure__[0].cell_contents
+
+
+
+"""
+Making make_averager more efficient
+"""
+def make_averager2() -> Callable[[float], float]:
+    count: float = 0
+    total: float = 0
+
+    def averager(value: float) -> float:
+        nonlocal count, total
+        count += 1
+        total += value
+        return total / count
+
+    return averager
+
+avg_fun2 = make_averager2()
+print(avg_fun2(10))
+print(avg_fun2(11))
+print(avg_fun2(12))
+
+
+"""
+Defining a decorator to measure amount of time it takes
+a function to run
+"""
+def time(fun:Callable) -> Callable:
+    def timer(*args):
+        import time
+        start = time.time()
+        result = fun(*args)
+        end = time.time()
+        fun_name = fun.__name__
+        args_str = ', '.join(str(arg) for arg in args)
+        print(f"Elapsed time for {fun_name}({args_str}): {end - start} ms")
+        return result
+    return timer
+
+@time
+def waste_some_time(num:int) -> int:
+    return sum(range(num))
+
+print(waste_some_time(1000000))
+
+
+"""
+Notice how the above function, waste_some time
+was actually replaced by timer
+
+This is bc usually when we call a decorator, such as above, what
+it actually happends under the hood is this:
+
+@decorator
+def my_fun(args):
+    ... something ...
+
+def my_fun(args):
+    ... something ...
+
+my_fun = decorator(my_fun)
+
+Where decorator returns a decorated function
+"""
+
+print(f"waste_some_time function name: {waste_some_time.__name__}")
