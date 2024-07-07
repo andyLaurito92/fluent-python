@@ -88,6 +88,7 @@ a function to run
 """
 def time(fun:Callable) -> Callable:
     def timer(*args):
+        """ breaking everything """
         import time
         start = time.time()
         result = fun(*args)
@@ -100,9 +101,11 @@ def time(fun:Callable) -> Callable:
 
 @time
 def waste_some_time(num:int) -> int:
+    """ some useless docs """
     return sum(range(num))
 
 print(waste_some_time(1000000))
+help(waste_some_time)
 
 
 """
@@ -125,3 +128,50 @@ Where decorator returns a decorated function
 """
 
 print(f"waste_some_time function name: {waste_some_time.__name__}")
+
+
+"""
+Problem with the above time is that:
+1. It replaces the function name
+2. It doesn't copy the documentation
+3. If the original function has keyword arguments, those are ommitted
+
+A better implementation would be:
+"""
+
+import functools
+
+def time2(fun:Callable) -> Callable:
+    @functools.wraps(fun)
+    def timer(*args, **kwargs):
+        import time
+        start = time.time()
+        result = fun(*args, **kwargs)
+        end = time.time()
+        end = time.time()
+        fun_name = fun.__name__
+        positional_args = ', '.join(str(arg) for arg in args)
+        keyword_args = ', '.join(f"{k}={v}" for k, v in kwargs.items())
+        args_str = ', '.join(filter(None, [positional_args, keyword_args]))
+        print(f"Elapsed time for {fun_name}({args_str}): {end - start} ms")
+        return result
+    return timer
+
+
+@time2
+def waste_some_time2(num:int) -> int:
+    """some documentation"""
+    return sum(range(num))
+
+print(waste_some_time2(1000000))
+print(f"waste_some_time2 function name: {waste_some_time2.__name__}")
+
+help(waste_some_time2)
+
+
+def myfun(num1: int, num2: int) -> int:
+    return str(num1) + num2
+
+
+a = myfun(1, 'abc')
+print(a)
