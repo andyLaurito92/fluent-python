@@ -167,11 +167,3 @@ print(waste_some_time2(1000000))
 print(f"waste_some_time2 function name: {waste_some_time2.__name__}")
 
 help(waste_some_time2)
-
-
-def myfun(num1: int, num2: int) -> int:
-    return str(num1) + num2
-
-
-a = myfun(1, 'abc')
-print(a)
