@@ -17,8 +17,12 @@ Strategy: Interface in common to the components that implement the different alg
 
 Concrete strategies: One of the concrete subclasses of Strategy
 
-Note: The selection of the strategy is outside the scope of the pattern
+Note 1: The selection of the strategy is outside the scope of the pattern
+
+Note 2: Often concrete strategies don't manage internal states, they only deal
+with data from the context
 """
+
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from decimal import Decimal
@@ -39,7 +43,7 @@ class LineItem(NamedTuple):
 class Order(NamedTuple): # Context
     customer: Customer
     cart: Sequence[LineItem]
-    promotion: Optional['Promotion'] = None
+    promotion: Optional[Promotion] = None
 
     def total(self) -> Decimal:
         totals = (item.total() for item in self.cart)
@@ -121,3 +125,5 @@ that can be removed:
 
 Let's rewrite the above code and remove the above bolierplate code
 """
+
+
