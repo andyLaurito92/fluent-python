@@ -26,11 +26,10 @@ class Vector2D:
         return bool(abs(self))
 
     def __eq__(self, other) -> bool:
-        if type(other) == bool:
-            # Case where we want to evaluate truthy of this elem
-            return bool(self) == other
-        elif type(self) != type(other):
-            return False
-        # This works bc tuple receives an iterator, therefore
-        # these tuples are built upon coordinates in vectors
-        return tuple(self) == tuple(other)
+        match other:
+            case bool():
+                return bool(self) == other
+            case Vector2D():
+                return tuple(self) == tuple(other)
+            case _:
+                return False
