@@ -1,7 +1,10 @@
 import math
+from array import array
 from typing import Iterable
 
 class Vector2D:
+    typecode = 'd'
+
     def __init__(self, x: float, y: float) -> None:
         self.x = float(x)
         self.y = float(y)
@@ -24,6 +27,10 @@ class Vector2D:
     def __bool__(self) -> bool:
         # Truthy nomenclature in python
         return bool(abs(self))
+
+    def __bytes__(self) -> bytes:
+        return (bytes([ord(self.typecode)]) + bytes(array(self.typecode, self)))
+        
 
     def __eq__(self, other) -> bool:
         match other:

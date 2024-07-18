@@ -37,3 +37,6 @@ class Vector2DTests(TestCase):
 
     def test_empty_vector_evaluates_to_false(self):
         self.assertEqual(Vector2D(0, 0), False)
+
+    def test_can_convert_vector_to_bytes(self):
+        self.assertEqual(b'd\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@', bytes(self.myvector))
