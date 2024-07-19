@@ -1,4 +1,5 @@
 from unittest import TestCase
+import collections
 
 from vector2d import Vector2D
 
@@ -51,3 +52,11 @@ class Vector2DTests(TestCase):
     def test_can_specify_polar_formatting(self):
         self.assertEqual(format(self.myvector, '.2fp'), '<5.00, 0.64>')
         self.assertEqual(format(Vector2D(1, 1), 'p'), '<1.4142135623730951, 0.7853981633974483>')
+
+    def test_vector_is_immutable(self):
+        with self.assertRaises(Exception) as context:
+            self.myvector.x = 3.4
+            self.assertTrue("Can't set attribute" in context.exception)
+
+    def test_vector_is_hashable(self):
+        self.assertTrue(isinstance(self.myvector, collections.abc.Hashable))

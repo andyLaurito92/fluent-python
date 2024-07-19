@@ -14,9 +14,17 @@ class Vector2D:
     def angle(self) -> float:
         return math.atan2(self.x, self.y)
 
+    @property
+    def x(self) -> float:
+        return self.__x
+
+    @property
+    def y(self) -> float:
+        return self.__y
+
     def __init__(self, x: float, y: float) -> None:
-        self.x = float(x)
-        self.y = float(y)
+        self.__x = float(x)
+        self.__y = float(y)
 
     def __repr__(self) -> str:
         """ Returns programmer representation of vector 2d """
@@ -52,6 +60,11 @@ class Vector2D:
         components = (format(c, fmt_spec) for c in coordinates)
         return outer_fmt.format(*components)
 
+    def __hash__(self) -> int:
+        """ Returns hash as suggested in https://docs.python.org/3/reference/datamodel.html#object.__hash__ """
+        return hash((self.x, self.y))
+        
+        
     def __eq__(self, other) -> bool:
         match other:
             case bool():
