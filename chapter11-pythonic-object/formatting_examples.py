@@ -21,3 +21,14 @@ str.format() documentation can be found here: https://docs.python.org/3/library/
 "{:<30}".format("left aligned")
 "{:^30}".format("center aligned")
 "{:*^100}".format("center aligned with fill in asterik")
+
+
+"""
+Int type supports b and x for base 2 and base 16 output
+"""
+
+format(42, 'b')
+
+format(42, 'x')
+
+format(2 / 3, '.1%')

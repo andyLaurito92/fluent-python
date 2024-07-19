@@ -43,3 +43,11 @@ class Vector2DTests(TestCase):
 
     def test_can_convert_vector_to_bytes_and_back(self):
         self.assertEqual(Vector2D.frombytes(bytes(self.myvector)), self.myvector)
+
+    def test_can_specify_formatting_options(self):
+        self.assertEqual(format(self.myvector, '.2f'), '(3.00, 4.00)')
+        self.assertEqual(format(self.myvector, '.3e'), '(3.000e+00, 4.000e+00)')
+
+    def test_can_specify_polar_formatting(self):
+        self.assertEqual(format(self.myvector, '.2fp'), '<5.00, 0.64>')
+        self.assertEqual(format(Vector2D(1, 1), 'p'), '<1.4142135623730951, 0.7853981633974483>')
