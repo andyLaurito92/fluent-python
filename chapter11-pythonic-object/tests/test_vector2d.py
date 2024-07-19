@@ -40,3 +40,6 @@ class Vector2DTests(TestCase):
 
     def test_can_convert_vector_to_bytes(self):
         self.assertEqual(b'd\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@', bytes(self.myvector))
+
+    def test_can_convert_vector_to_bytes_and_back(self):
+        self.assertEqual(Vector2D.frombytes(bytes(self.myvector)), self.myvector)

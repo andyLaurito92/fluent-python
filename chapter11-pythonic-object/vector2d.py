@@ -5,6 +5,12 @@ from typing import Iterable
 class Vector2D:
     typecode = 'd'
 
+    @classmethod
+    def frombytes(cls, octets: bytes) -> 'Vector2D':
+        typecode = chr(octets[0])
+        memv = memoryview(octets[1:]).cast(typecode)
+        return cls(*memv)
+
     def __init__(self, x: float, y: float) -> None:
         self.x = float(x)
         self.y = float(y)
