@@ -60,3 +60,6 @@ class Vector2DTests(TestCase):
 
     def test_vector_is_hashable(self):
         self.assertTrue(isinstance(self.myvector, collections.abc.Hashable))
+
+    def test_vector_can_be_transformed_to_complex_number(self):
+        self.assertEqual(complex(self.myvector), complex(3, 4))

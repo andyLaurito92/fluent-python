@@ -48,6 +48,9 @@ class Vector2D:
     def __bytes__(self) -> bytes:
         return (bytes([ord(self.typecode)]) + bytes(array(self.typecode, self)))
 
+    def __complex__(self) -> complex:
+        return complex(*self)
+
     def __format__(self, fmt_spec: str = '') -> str:
         """ If p is provided in the fmt_spec, we return polar coordinates """
         if fmt_spec.endswith('p'):
