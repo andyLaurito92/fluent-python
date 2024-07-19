@@ -3,6 +3,7 @@ from array import array
 from typing import Iterable
 
 class Vector2D:
+    __match_args__ = ('x', 'y')
     typecode = 'd'
 
     @classmethod
