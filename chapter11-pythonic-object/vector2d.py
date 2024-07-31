@@ -4,6 +4,10 @@ from typing import Iterable
 
 class Vector2D:
     __match_args__ = ('x', 'y')
+
+    # Typecode is a class variable that can be access by instances.
+    # In case an instance modifies this value, a new variable typecode
+    # is created under the new instance and the class variable is untouched
     typecode = 'd'
 
     @classmethod
