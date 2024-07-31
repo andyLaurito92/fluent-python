@@ -31,6 +31,11 @@ class Vector2D:
         self.__x = float(x)
         self.__y = float(y)
 
+    """
+    We take the class name dynamically so this method can be called
+    by subclasses without them having to re-implement this method bc
+    having the class hardcoded
+    """
     def __repr__(self) -> str:
         """ Returns programmer representation of vector 2d """
         class_name = type(self).__name__
