@@ -9,8 +9,8 @@ import reprlib
 from typing import Iterable, NoReturn
 
 class Vector:
-    __match_args__ = ('x', 'y', 'z', 't')
     typecode = 'd'
+    __match_args__ = ('x', 'y', 'z', 't')
     
     def __init__(self, elements: Iterable) -> NoReturn:
         """ Expects an iterable of _elements that represent this N-dimensional vector"""
@@ -36,20 +36,32 @@ class Vector:
     def __iter__(self) -> Iterable:
         return iter(self._elements)
 
-    def __getattribute__(self, attribute):
+    def __getattr__(self, attribute):
         cls = type(self)
         try:
             idx = cls.__match_args__.index(attribute)
         except ValueError:
             idx = -1
 
-        if 0 <= idx < len(cls.__match_args__):
+        if 0 <= idx < len(self._elements):
             return self._elements[idx]
-
         msg = f"{cls.__name__!r} object has not attribute {attribute!r}"
         raise AttributeError(msg)
-        
 
+    def __setattr__(self, name, val):
+        cls = type(self)
+        if len(name) == 1:
+            if name in cls.__match_args__:
+                error = 'Trying to set readonly attribute {attr_name}'
+            elif name.islower():
+                error = "Can't set attributes a to z in {cls_name!r}"
+            else:
+                # We allow to set this attribute
+                error = ''
+            if error:
+                msg = error.format(cls_name=cls.__name__, attr_name=name)
+        super().__setattr__(name, val)
+        
     def __eq__(self, other) -> bool:
         match other:
             case bool():

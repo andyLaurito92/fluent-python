@@ -21,3 +21,15 @@ class TestVector(TestCase):
 
     def test_can_access_vector_atrributes(self):
         self.assertEqual(self.vec.x, 3.0)
+
+        self.assertEqual(self.vec.z, 1.0)
+
+    def test_vector_is_immutable(self):
+        with self.assertRaises(Exception) as context:
+            self.vec.x = 10.0
+            self.assertTrue("read only attribute" in context)
+
+    def test_can_assign_other_variables(self):
+        val = "I can assign this"
+        self.vec.example = val
+        self.assertEqual(self.vec.example, val)
