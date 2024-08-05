@@ -43,7 +43,7 @@ class Vector:
         except ValueError:
             idx = -1
 
-        if 0 <= idx < len(__match_args__):
+        if 0 <= idx < len(cls.__match_args__):
             return self._elements[idx]
 
         msg = f"{cls.__name__!r} object has not attribute {attribute!r}"
@@ -73,7 +73,7 @@ class Vector:
         return bool(abs(self))
 
     @classmethod
-    def fromBytes(clss, octets) -> 'Vector':
+    def fromBytes(cls, octets) -> 'Vector':
        typecode = chr(octets[0])
        memv = memoryview(octets[1:]).cast(typecode)
        return cls(memv)
