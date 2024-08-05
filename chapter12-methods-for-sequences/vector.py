@@ -75,7 +75,10 @@ class Vector:
             case _:
                 if len(self) != len(other):
                     return False
-                
+                # In this way me make the equality function to work
+                # more efficiently. Instead of copying all elements
+                # in a tuple as we did before, we compare elements
+                # 1 by 1
                 for a, b in zip(self, other):
                     if a != b:
                         return False
