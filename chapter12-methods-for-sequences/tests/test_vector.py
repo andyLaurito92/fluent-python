@@ -18,3 +18,6 @@ class TestVector(TestCase):
         vec_slice = self.vec[0:2] 
         self.assertEqual(vec_slice, [3, 2])
         self.assertEqual(type(vec_slice), Vector)
+
+    def test_can_access_vector_atrributes(self):
+        self.assertEqual(self.vec.x, 3.0)

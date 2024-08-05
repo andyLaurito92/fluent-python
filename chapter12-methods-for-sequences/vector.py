@@ -9,8 +9,9 @@ import reprlib
 from typing import Iterable, NoReturn
 
 class Vector:
+    __match_args__ = ('x', 'y', 'z', 't')
     typecode = 'd'
-
+    
     def __init__(self, elements: Iterable) -> NoReturn:
         """ Expects an iterable of _elements that represent this N-dimensional vector"""
         self._elements = array.array(self.typecode, elements)
@@ -34,6 +35,20 @@ class Vector:
 
     def __iter__(self) -> Iterable:
         return iter(self._elements)
+
+    def __getattribute__(self, attribute):
+        cls = type(self)
+        try:
+            idx = cls.__match_args__.index(attribute)
+        except ValueError:
+            idx = -1
+
+        if 0 <= idx < len(__match_args__):
+            return self._elements[idx]
+
+        msg = f"{cls.__name__!r} object has not attribute {attribute!r}"
+        raise AttributeError(msg)
+        
 
     def __eq__(self, other) -> bool:
         match other:
