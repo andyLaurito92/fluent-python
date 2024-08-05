@@ -84,6 +84,9 @@ class Vector:
                         return False
                 return True
 
+        #Another way of implementing this would be:
+        # len(a) == len(b) && all(a == b for a, b in zip(self._elements, other))
+        
     def __repr__(self) -> str:
         str_repr = reprlib.repr(self._elements)
         str_repr = str_repr[str_repr.find('['):-1]
