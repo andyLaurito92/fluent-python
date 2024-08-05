@@ -24,7 +24,10 @@ class Vector:
             case int():
                 return self._elements[index]
             case slice():
-                return Vector(self._elements[index])
+                # Instead of hardcoding Vector class, we get dynamically
+                # the class of self in case this class is later extended
+                clss = type(self)
+                return clss(self._elements[index])
             case _:
                 raise Exception(f"__getitem__ recieved {index} which is not expected")
 
