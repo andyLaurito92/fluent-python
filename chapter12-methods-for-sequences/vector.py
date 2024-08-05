@@ -29,6 +29,7 @@ class Vector:
                 clss = type(self)
                 return clss(self._elements[index])
             case _:
+                # Example on when this would be triggered: Recieveing a float
                 raise Exception(f"__getitem__ recieved {index} which is not expected")
 
     def __iter__(self) -> Iterable:
