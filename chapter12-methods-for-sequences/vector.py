@@ -73,7 +73,13 @@ class Vector:
             case bool():
                 return bool(self) == other
             case _:
-                return tuple(self) == tuple(other)
+                if len(self) != len(other):
+                    return False
+                
+                for a, b in zip(self, other):
+                    if a != b:
+                        return False
+                return True
 
     def __repr__(self) -> str:
         str_repr = reprlib.repr(self._elements)

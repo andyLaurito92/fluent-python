@@ -36,3 +36,7 @@ class TestVector(TestCase):
 
     def test_can_hash_vector(self):
         self.assertEqual(hash(self.vec), 0)
+
+    def test_can_compare_vectors(self):
+        othervec = Vector((3, 2, 1))
+        self.assertEqual(self.vec, othervec)
