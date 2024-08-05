@@ -7,6 +7,8 @@ import array
 import math
 import reprlib
 from typing import Iterable, NoReturn
+from functools import reduce
+from operator import xor
 
 class Vector:
     typecode = 'd'
@@ -61,6 +63,10 @@ class Vector:
             if error:
                 msg = error.format(cls_name=cls.__name__, attr_name=name)
         super().__setattr__(name, val)
+        
+    def __hash__(self):
+        hashes = (hash(x) for x in self._elements)
+        return reduce(xor, hashes, 0)
         
     def __eq__(self, other) -> bool:
         match other:

@@ -33,3 +33,6 @@ class TestVector(TestCase):
         val = "I can assign this"
         self.vec.example = val
         self.assertEqual(self.vec.example, val)
+
+    def test_can_hash_vector(self):
+        self.assertEqual(hash(self.vec), 0)
