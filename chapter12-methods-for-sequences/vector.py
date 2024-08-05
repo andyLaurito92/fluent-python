@@ -19,6 +19,15 @@ class Vector:
         """ Returns the len of this vector """
         return len(self._elements)
 
+    def __getitem__(self, index):
+        match index:
+            case int():
+                return self._elements[index]
+            case slice():
+                return Vector(self._elements[index])
+            case _:
+                raise Exception(f"__getitem__ recieved {index} which is not expected")
+
     def __iter__(self) -> Iterable:
         return iter(self._elements)
 
