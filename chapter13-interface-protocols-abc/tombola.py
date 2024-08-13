@@ -38,6 +38,20 @@ class Tombola(ABC):
     def loaded(self):
         """Return `True` if there's at least 1 item, `False` otherwise"""
         return bool(self.inspect())
-    
 
-        
+
+
+
+
+"""
+Note: The abc package also provides @abstractclassmethod, @abstractstaticmethod and @abstractproperty decorators. These last three are deprecated in python 3.3 because now it's possible to stack decorators on top of @abstractmethod
+
+
+class MyABC(ABC):
+   @classmethod
+   @abstractmethod
+   def an_abstract_classmethod(cls, ...):
+       pass
+
+The order of stacked decorators matters: When abstractmethod is applied in combination w/other methods descriptors, it must be the innermost, because it's the one that actually modifies the method's behavior.
+"""
