@@ -53,3 +53,9 @@ class FrenchDeck(MutableSequence):
 
     def insert(self, position, value):
         self._cards.insert(position, value)
+
+
+"""
+Note: Python doesn't check for the implementation of the abstract
+methods at import time but at runtime
+"""
