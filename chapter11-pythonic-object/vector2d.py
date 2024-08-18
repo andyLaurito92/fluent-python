@@ -1,3 +1,15 @@
+
+"""
+Note: For being able to use the Vector2D annotation as a return type, we need
+to do:
+from __future__ import annotations
+
+The above causes type hints to be stored as strings, without being evaluated at
+import time. See pep-0563 for more information
+This shouldn't be a problem in Python 3.10
+"""
+
+
 import math
 from array import array
 from typing import Iterable, SupportsComplex
@@ -11,13 +23,13 @@ class Vector2D:
     typecode = 'd'
 
     @classmethod
-    def frombytes(cls, octets: bytes) -> 'Vector2D':
+    def frombytes(cls, octets: bytes) -> Vector2D:
         typecode = chr(octets[0])
         memv = memoryview(octets[1:]).cast(typecode)
         return cls(*memv)
 
     @classmethod
-    def fromcomplex(cls, complex_number: SupportsComplex) -> 'Vector2D':
+    def fromcomplex(cls, complex_number: SupportsComplex) -> Vector2D:
         # Convert to complex to check that we are recieveing what we expect.
         # If complex_number is not a complex, this will raise a TypeError
         c = complex(complex_number)
