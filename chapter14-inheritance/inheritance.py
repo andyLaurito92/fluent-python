@@ -57,3 +57,21 @@ dd['two'] = 2
 print(dd)
 dd.update(three=3)
 print(dd)
+
+
+
+"""
+The problem is not limited to calls within an instance
+"""
+
+class AnswerDict(dict):
+    def __getitem__(self, key):
+        return 42
+
+ad = AnswerDict(a='foo')
+print(ad['a'])
+
+d = {}
+d.update(ad)
+# Returns foo!
+print(d['a'])
