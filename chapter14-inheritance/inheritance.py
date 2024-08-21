@@ -75,3 +75,9 @@ d = {}
 d.update(ad)
 # Returns foo!
 print(d['a'])
+
+
+"""
+The solution to the above problems is to subclass from
+collections.UserDict, collections.UserList or collections.UserString
+"""
