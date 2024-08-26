@@ -29,10 +29,20 @@ class UpperCaseMixin:
         return super().__contains__(_upper(key))
         
 
+
+"""
+Note: Given that a mixin depends on other classes to exists,
+it's important to understand which is the order of the MRO of
+class inheriting from a mixin.
+Usually the mixin is the first class in the inheritance list
+"""
 class UpperDict(UpperCaseMixin, UserDict):
     pass
+
 
 class UpperCounter(UpperCaseMixin, Counter):
     """ Specialization of Counter that converts keys to uppercase """
 
 d = UpperDict([('a', 'letter A'), (2, 'digit two')])
+
+c = UpperCounter('aAAbBBcCC')
