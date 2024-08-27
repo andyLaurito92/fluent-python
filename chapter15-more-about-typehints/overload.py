@@ -41,3 +41,28 @@ def foo(x):
 
 print(foo(1))
 print(foo('hey'))
+
+
+"""
+A more interesting example
+"""
+
+import functools
+import operator
+from collections.abc import Iterable
+from typing import TypeVar
+
+T = TypeVar('T')
+S = TypeVar('S')
+
+@overload
+def sum(it:Iterable[T]) -> T: ...
+
+@overload
+def sum(it: Iterable[T], /, start: S) -> S | T: ...
+
+def sum(it, /, start=0):
+    return functools.reduce(operator.add, it, start)
+
+print(sum(range(10), start=4))
+print(sum(range(10)))
