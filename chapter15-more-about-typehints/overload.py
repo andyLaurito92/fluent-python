@@ -34,6 +34,8 @@ def foo(x: int) -> int: ...
 @overload
 def foo(x: str) -> str: ...
 
+# Note that the function of the implementation doesn't have
+# any type hint
 def foo(x):
     return x * 2
 
