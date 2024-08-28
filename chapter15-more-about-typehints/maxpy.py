@@ -30,7 +30,7 @@ def mymax(__iter: Iterable[T], *, key: Callable[[T], LT]) -> T: ...
 @overload
 def mymax(__iter: Iterable[LT], *, key: None = ...) -> LT: ...
 @overload
-def mymax(__iter: Iterable[T], *, key: Callable[[T], LT], default: DT ) -> T | DT: ...
+def mymax(__iter: Iterable[T], *, key: Callable[[T], LT], default: DT) -> T | DT: ...
 @overload
 def mymax(__iter: Iterable[LT], *, key: None = ..., default:DT) -> LT | DT: ...
 
@@ -66,3 +66,7 @@ def mymax(first, *args, key=None, default=MISSING):
                 candidate = item
     return candidate
         
+
+# Mypy detects this
+max(None, None)
+max([None, None])
