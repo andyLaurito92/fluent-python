@@ -44,3 +44,41 @@ def to_xml(book: BookDict) -> str:
             elements.append(f'<{tag}>{value}</{tag}>')
     xml = '\n\t'.join(elements)
     return f'<BOOK>\n\t{xml}\n</BOOK>'
+
+
+"""
+Let's consider this other example
+"""
+
+import json
+def from_json(data: str) -> BookDict:
+    whatever = json.loads(data)
+    return whatever
+
+from_json('{"name":"John", "age":30, "car":null}')
+
+"""
+The above of course that it works, and mypy doesn't raise an error. The reason on why is
+because whatever is inferred as Any, and Any is compatible with BookDict.
+
+If you run mypy with flag --disallow-any-expr you get:
+
+typedict_examples.py:55: error: Expression has type "Any"  [misc]
+typedict_examples.py:56: error: Expression has type "Any"  [misc]
+"""
+
+def from_json2(data:str) -> BookDict:
+    abook: BookDict = json.loads(data)
+    return abook
+
+from_json('{"name":"John", "age":30, "car":null}')
+
+"""
+An important lesson to learn from the above example: Static type checking is unable
+to prevent errors with code that is inherently dynamic, such as json.loads() which
+builds objects at runtime.
+
+This problem is something that also happens in other programming languages such as Java.
+
+It's also a good reminder that not all problems can be solved by a static type checker ;)
+"""
