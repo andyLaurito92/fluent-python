@@ -3,7 +3,9 @@ Comment the following line to see the effects of postpone evaluation of annotati
 
 
 """
-from __future__ import annotations
+#from __future__ import annotations
+from typing import get_type_hints
+import inspect
 
 """
 Playing aroud a bit: Implementing the clip function
@@ -38,13 +40,12 @@ def myclip(text: str, max_len:int = 80) -> str:
             new_text += "\n".join(text_splitted_in_lines)
     return new_text
 
-import inspect
-
 """
 You can get type hints in runtime using inspect.get_annotations().
 Type hints are stored as a dictionary in attr __annotations__ 
 """
-inspect.get_annotations(myclip)
+print(inspect.get_annotations(myclip))
+
 
 """
 Big difference: By default, type hints are evaluated at runtime. This might
@@ -57,4 +58,18 @@ strings.
 
 By commenting or uncommenting the first line of this file, you can see
 the difference in the return value of inspect.get_annotations
+
+Note how by uncommenting the import, the dictionary has __annotations__
+types as strings, even though we have defined type hints using classes
+"""
+
+"""
+Difference between this function and inspect.get_annotations: This method
+resolves the type hints to its real classes in Python
+"""
+print(get_type_hints(myclip))
+
+
+"""
+Must read for type-hints: Annotations best practices: https://docs.python.org/3.10/howto/annotations.html
 """
