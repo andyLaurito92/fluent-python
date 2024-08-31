@@ -77,6 +77,8 @@ class Vector:
         
     def __eq__(self, other) -> bool:
         match other:
+            case None:
+                return False
             case bool():
                 return bool(self) == other
             case _:
@@ -148,6 +150,12 @@ class Vector:
 
     def __mul__(self, other) -> 'Vector':
         """ Implements scalar multiplication in vector"""
+        try:
+            """ Only numbers could be used in this method. Raise an
+            error if receive something that cannot be converted to float"""
+            scalar = float(other)
+        except TypeError as e:
+            return NotImplemented
         return Vector(x * other for x in self)
 
     def __rmul__(self, other) -> 'Vector':

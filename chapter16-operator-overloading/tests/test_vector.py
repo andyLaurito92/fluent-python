@@ -2,6 +2,7 @@ import unittest
 import importlib
 from vectors.vector import Vector
 from vectors.vector2d import Vector2D
+from fractions import Fraction
 
 class VectorTests(unittest.TestCase):
     def setUp(self):
@@ -36,8 +37,16 @@ class VectorTests(unittest.TestCase):
         self.assertEqual(vec2d + self.vector, Vector((4, 6, 3)))
 
     def test_can_multiply_a_scalar(self):
-        self.assertEqual(self.vector * 3, Vector((3, 6, 9)))
+        scalar = Fraction(1, 3)
 
+        self.assertEqual(self.vector * 3, Vector((3, 6, 9)))
+        self.assertEqual(self.vector * scalar, Vector(Fraction(1, 3), Fraction(2, 3), 1))
+
+    def test_when_try_to_multiply_notnumber_raise_exception(self):
+        with self.assertRaises(Exception) as context:
+            self.vector * "hey"
+            self.assertTrue("could not convert" in context)
+        
     def test_can_initialize_vector_by_providing_multiple_values(self):
         self.assertEqual(Vector, type(Vector(1, 2, 3)))
 
