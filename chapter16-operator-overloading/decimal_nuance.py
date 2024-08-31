@@ -15,3 +15,11 @@ print(f"This is equal {one_third == +one_third}")
 ctx.prec = 28
 print(f"This is not {one_third == +one_third}")
 print(+one_third)
+
+
+"""
+Why does the above happen? Because each occurrence of the
+expression +one_third produces a new decimal instance from
+the value of one_third, but using the precision of the current
+arithmetic context
+"""

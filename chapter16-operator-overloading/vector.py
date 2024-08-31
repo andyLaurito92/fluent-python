@@ -7,6 +7,7 @@ vector with mathematical operators
 import array
 import math
 import reprlib
+import itertools
 from typing import Iterable, NoReturn
 from functools import reduce
 from operator import xor
@@ -112,6 +113,11 @@ class Vector:
 
     def __pos__(self) -> 'Vector':
         return Vector(self)
+
+    def __add__(self, other: 'Vector') -> 'Vector':
+        pairs = itertools.zip_longest(self, other, fillvalue=0)
+        return Vector(a + b for a, b in pairs)
+
 
     @classmethod
     def fromBytes(cls, octets) -> 'Vector':
