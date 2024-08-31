@@ -18,3 +18,9 @@ class VectorTests(unittest.TestCase):
         with self.assertRaises(TypeError) as context:
             ~self.vector
             self.assertTrue("bad operand type for unary ~: 'Vector'." in context.exception)
+
+    def test_can_add_two_vectors(self):
+        self.assertEqual(Vector(range(1, 4)) + Vector(range(5, 8)), Vector([6, 8, 10]))
+
+    def test_can_add_vectors_of_multiple_size(self):
+        self.assertEqual(self.vector + Vector(range(2, 3)), Vector([3, 2, 3]))
