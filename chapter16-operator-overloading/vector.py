@@ -8,7 +8,7 @@ import array
 import math
 import reprlib
 import itertools
-from typing import Iterable, NoReturn
+from typing import Iterable, NoReturn, Iterator
 from functools import reduce
 from operator import xor
 
@@ -16,7 +16,7 @@ class Vector:
     typecode = 'd'
     __match_args__ = ('x', 'y', 'z', 't')
     
-    def __init__(self, elements: Iterable) -> NoReturn:
+    def __init__(self, elements: Iterable) -> None:
         """ Expects an iterable of _elements that represent this N-dimensional vector"""
         self._elements = array.array(self.typecode, elements)
 
@@ -37,7 +37,7 @@ class Vector:
                 # Example on when this would be triggered: Recieveing a float
                 raise Exception(f"__getitem__ recieved {index} which is not expected")
 
-    def __iter__(self) -> Iterable:
+    def __iter__(self) -> Iterator:
         return iter(self._elements)
 
     def __getattr__(self, attribute):
@@ -115,6 +115,15 @@ class Vector:
         return Vector(self)
 
     def __add__(self, other: 'Vector') -> 'Vector':
+        """
+        This method could be typed with other as an Iterable. This would allow a vector
+        to be added to whatever iterable that can be added to the elements stored in the vector.
+        This is an excellent example where we could apply duck typing an allow this vector class
+        to support being container of whatever element that supports a set of operators (even though,
+        we could define a generic type and specify what we expect from an element)
+        Given that my intention is to represent a mathematical vector, we will enforce other to be a
+        vector instance
+        """
         pairs = itertools.zip_longest(self, other, fillvalue=0)
         return Vector(a + b for a, b in pairs)
 
