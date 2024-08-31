@@ -1,5 +1,7 @@
 import unittest
-from vector import Vector
+import importlib
+from vectors.vector import Vector
+from vectors.vector2d import Vector2D
 
 class VectorTests(unittest.TestCase):
     def setUp(self):
@@ -24,3 +26,11 @@ class VectorTests(unittest.TestCase):
 
     def test_can_add_vectors_of_multiple_size(self):
         self.assertEqual(self.vector + Vector(range(2, 3)), Vector([3, 2, 3]))
+
+    def test_can_add_vector_with_vector2d(self):
+        vec2d = Vector2D(3, 4)
+        self.assertEqual(self.vector + vec2d, Vector((4, 6, 3)))
+
+    def test_can_reverse_add_with_vector2d(self):
+        vec2d = Vector2D(3, 4)
+        self.assertEqual(vec2d + self.vector, Vector((4, 6, 3)))

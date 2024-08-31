@@ -114,6 +114,20 @@ class Vector:
     def __pos__(self) -> 'Vector':
         return Vector(self)
 
+    def __radd__(self, other) -> 'Vector':
+        """
+        Reverse add allows to perform operation other + vector when
+        other doesn't support method __add__
+
+        Given an expression a + b, the interpreter will perform these steps:
+        1. if a has __add__, call a.__add__(b) and return result unless it's NotImplemented
+        2. if a doesn't have __add__, or calling it returns NotImplemented, check if b has
+        __radd__, then call b.__radd__(a) and return result unless it's NotImplemented
+        3. if b doesn't have __radd__, or calling it returns NotImplemented, raise TypeError
+        with an unsupported operand types message
+        """
+        return self + other
+
     def __add__(self, other: 'Vector') -> 'Vector':
         """
         This method could be typed with other as an Iterable. This would allow a vector
