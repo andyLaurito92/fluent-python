@@ -4,9 +4,15 @@ vec1 = Vector(range(2, 5))
 Even though we have defined addition to only support another vector,
 because these checks only are for the type checker, we can safely
 add a tuple to our vector in runtime without any issue
+
+Update: We have updated the function to stop this behaviour by
+checking in runtime the type of the argument
 """
 
-print(vec1 + (2, 3))
+try: 
+    print(vec1 + (2, 3))
+except Exception as e:
+    print(e)
 
 """
 However, we cannot add our vector to a tuple
@@ -37,9 +43,20 @@ Vector.__add__ = new_add
 
 vec2 = Vector(range(2, 5))
 
-print(vec1 + (2, 3))
+try:
+    print(vec1 + (2, 3))
+except TypeError as e:
+    print(e)
 
 
 """
-What if I want to add this Vector against the Vector2D implemented in chapter 11 ?
+What if I want to add this Vector against the Vector2D implemented in chapter 11?
+
+We need to implement __radd__ (reverse add) special method in vector to do so
 """
+
+"""
+What if we sum to vector a non-iterable element?
+"""
+
+vec2 + 1

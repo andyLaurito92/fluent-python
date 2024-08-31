@@ -16,9 +16,14 @@ class Vector:
     typecode = 'd'
     __match_args__ = ('x', 'y', 'z', 't')
     
-    def __init__(self, elements: Iterable) -> None:
-        """ Expects an iterable of _elements that represent this N-dimensional vector"""
-        self._elements = array.array(self.typecode, elements)
+    def __init__(self, elements: Iterable = None, *args) -> None:
+        values = elements
+        if not isinstance(elements, Iterable):
+            if len(args) > 0:
+                values = [elements] + list(args)
+            else:
+                raise ValueError("Expected either iterable or list of elements to initialize vector. None given")
+        self._elements = array.array(self.typecode, values)
 
     def __len__(self) -> int:
         """ Returns the len of this vector """
@@ -141,6 +146,12 @@ class Vector:
         pairs = itertools.zip_longest(self, other, fillvalue=0)
         return Vector(a + b for a, b in pairs)
 
+    def __mul__(self, other) -> 'Vector':
+        """ Implements scalar multiplication in vector"""
+        return Vector(x * other for x in self)
+
+    def __rmul__(self, other) -> 'Vector':
+        return self * other
 
     @classmethod
     def fromBytes(cls, octets) -> 'Vector':

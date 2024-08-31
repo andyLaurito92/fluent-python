@@ -34,3 +34,14 @@ class VectorTests(unittest.TestCase):
     def test_can_reverse_add_with_vector2d(self):
         vec2d = Vector2D(3, 4)
         self.assertEqual(vec2d + self.vector, Vector((4, 6, 3)))
+
+    def test_can_multiply_a_scalar(self):
+        self.assertEqual(self.vector * 3, Vector((3, 6, 9)))
+
+    def test_can_initialize_vector_by_providing_multiple_values(self):
+        self.assertEqual(Vector, type(Vector(1, 2, 3)))
+
+    def test_raise_exception_when_no_argument_is_provided_to_init(self):
+        with self.assertRaises(Exception) as context:
+            Vector()
+            self.assertTrue("Expected either iterable or list of elements to initialize vector. None given" in context)
