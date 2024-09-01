@@ -62,6 +62,6 @@ class VectorTests(unittest.TestCase):
 
     def test_when_tryto_multiplyvectors_differentsize_raise_exception(self):
         vec2 = Vector(1, 2)
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(ValueError) as context:
             self.vector @ vec2
-            self.assertTrue("error" in context)
+            self.assertTrue(context)

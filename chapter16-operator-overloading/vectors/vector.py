@@ -162,7 +162,7 @@ class Vector:
         return self * other
 
     def __matmul__(self, other) -> float:
-        return sum(a * b for a, b in zip(self, other))
+        return sum(a * b for a, b in zip(self, other, strict=True))
 
     def __rmatmul__(self, other) -> float:
         return self @ other
