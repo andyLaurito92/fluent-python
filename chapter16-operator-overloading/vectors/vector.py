@@ -161,6 +161,12 @@ class Vector:
     def __rmul__(self, other) -> 'Vector':
         return self * other
 
+    def __matmul__(self, other) -> float:
+        return sum(a * b for a, b in zip(self, other))
+
+    def __rmatmul__(self, other) -> float:
+        return self @ other
+
     @classmethod
     def fromBytes(cls, octets) -> 'Vector':
        typecode = chr(octets[0])

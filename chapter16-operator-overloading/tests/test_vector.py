@@ -54,3 +54,14 @@ class VectorTests(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             Vector()
             self.assertTrue("Expected either iterable or list of elements to initialize vector. None given" in context)
+
+    def test_can_multiply_another_vector(self):
+        vec2 = Vector(1, 1, 1)
+        # 1 + 2 + + 3
+        self.assertEqual(self.vector @ vec2, 6.0)
+
+    def test_when_tryto_multiplyvectors_differentsize_raise_exception(self):
+        vec2 = Vector(1, 2)
+        with self.assertRaises(Exception) as context:
+            self.vector @ vec2
+            self.assertTrue("error" in context)
