@@ -158,10 +158,18 @@ class Vector:
             return NotImplemented
         return Vector(x * other for x in self)
 
-    def __rmul__(self, other) -> 'Vector':
+    def __rmul__(self, other: 'Vector') -> 'Vector':
         return self * other
 
-    def __matmul__(self, other) -> float:
+    def __matmul__(self, other: 'Vector') -> float:
+        if not isinstance(other, Vector):
+            """
+             We won't multiply by sht that's not a vector, which
+             doesn't mean that other's type could implement __rmatmul__
+             that could handle this situation. We just don't want to
+             handle it
+            """
+            return NotImplemented
         try: 
             return sum(a * b for a, b in zip(self, other, strict=True))
         except ValueError:

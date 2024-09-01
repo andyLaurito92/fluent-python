@@ -65,3 +65,8 @@ class VectorTests(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             self.vector @ vec2
             self.assertTrue("Expected both lengths to be equal" in context)
+
+    def test_when_tryingto_multplyvector_withshtdifferent_ofvector_raiseUnsupportedOperand(self):
+        with self.assertRaises(TypeError) as context:
+            self.vector @ (1, 2)
+            self.assertTrue("unsupported operand" in context)
