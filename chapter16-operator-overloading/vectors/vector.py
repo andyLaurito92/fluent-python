@@ -162,7 +162,11 @@ class Vector:
         return self * other
 
     def __matmul__(self, other) -> float:
-        return sum(a * b for a, b in zip(self, other, strict=True))
+        try: 
+            return sum(a * b for a, b in zip(self, other, strict=True))
+        except ValueError:
+            raise ValueError(("Expected both lengths to be equal."
+            f"Got vec1: {len(self)} and vec2: {len(other)}"))
 
     def __rmatmul__(self, other) -> float:
         return self @ other

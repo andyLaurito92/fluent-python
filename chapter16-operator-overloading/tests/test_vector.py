@@ -64,4 +64,4 @@ class VectorTests(unittest.TestCase):
         vec2 = Vector(1, 2)
         with self.assertRaises(ValueError) as context:
             self.vector @ vec2
-            self.assertTrue(context)
+            self.assertTrue("Expected both lengths to be equal" in context)
