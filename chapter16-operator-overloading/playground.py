@@ -59,4 +59,27 @@ We need to implement __radd__ (reverse add) special method in vector to do so
 What if we sum to vector a non-iterable element?
 """
 
-vec2 + 1
+try: 
+    vec2 + 1
+except Exception as e:
+    print(e)
+
+
+"""
+Augmented operators:
+
+By default, when you do a += b, this equals to a = a + b if
+the __iadd__ is not implemented. In other words, the a += b
+is just syntaxis sugar.
+It's important to understand this because you're creating a new
+object if the object doesn't implement in-place operations
+"""
+
+vec1 = Vector(1, 2, 3)
+print(vec1)
+print(id(vec1))
+
+vec1 += Vector([1] * 3)
+
+print(vec1)
+print(id(vec1))
