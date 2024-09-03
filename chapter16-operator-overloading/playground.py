@@ -83,3 +83,35 @@ vec1 += Vector([1] * 3)
 
 print(vec1)
 print(id(vec1))
+
+
+"""
+Example of an in-place addition method for Vector:
+
+Note: This is a bad practice and I'm doing it just for the sake
+of showing how it should be implemented. In practice, our Vector
+class should be immutable and shouldn't allow the in-place infix
+operands.
+
+Notice that inplace operators should return self and we are more
+relax with the type of the argument receieved (in contrast with
+common addition, where we do enforce the other argument to be of
+the same type of the instance)
+"""
+def inplace_addition(self, other):
+    from typing import Iterable
+    """
+    Because this is a in-place addition, we only care
+    about other being iterable
+    """
+    self._elements.extend(other)
+    return self
+    
+
+Vector.__iadd__ = inplace_addition
+
+
+
+print(f"Before extending {vec1}")
+vec1 += (2, 4)
+print(f"After extending {vec1}")
