@@ -20,3 +20,32 @@ for num in myiter:
 Notice that this iterator is of type callable_iterator
 """
 print(type(myiter))
+
+
+"""
+Important note: Python obtains iterators from iterables (that's the relationship
+between iterators and iterables)
+"""
+
+
+"""
+When we do a for loop like this
+"""
+
+for letter in "Andres":
+    print(letter)
+
+
+"""
+What is actually happening underneath is:
+"""
+
+print("The reality behind the Matrix")
+s = "Andres"
+myiter = iter(s)
+while True:
+    try:
+        print(next(myiter))
+    except StopIteration:
+        del myiter
+        break
