@@ -2,6 +2,27 @@ import re
 import reprlib 
 
 WORD = re.compile(r'\w+')
+
+"""
+This implementation follows the Design Pattern suggestion
+(the gang of 4)
+"""
+class SentenceIterator:
+    def __init__(self, words):
+        self.idx = 0
+        self.words = words
+
+    def __next__(self) -> str:
+        try:
+            word = self.words[self.idx]
+            self.idx += 1
+            return word
+        except IndexError:
+            raise StopIteration()
+
+    def __iter__(self):
+        return self
+        
 class Sentence:
     def __init__(self, text: str) -> None:
         self.text = text
@@ -9,6 +30,9 @@ class Sentence:
 
     def __getitem__(self, idx: int) -> str:
         return self.words[idx]
+
+    def __iter__(self) -> SentenceIterator:
+        return SentenceIterator(self.words)
 
     def __len__(self) -> int:
         return len(self.words)
@@ -21,7 +45,13 @@ mysentence = Sentence("Some cool text insert here")
 
 aniter = iter(mysentence)
 
+print(type(aniter))
+
 print(list(aniter))
+
+for word in mysentence:
+    print(word)
+
 """
 Why Sentence is iterable? Because of the iter built-in function.
 When Python needs to iterate over an object x, it automatically calls iter(x).
