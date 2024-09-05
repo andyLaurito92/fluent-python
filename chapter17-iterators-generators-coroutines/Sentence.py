@@ -82,3 +82,27 @@ class Spam:
 spam = Spam()
 
 list(spam)
+
+
+"""
+Instead of defining a class for the Iterator as described in the desgin patterns book,
+we can use the yield statement which was introduced thx to the CLU programming language,
+a language implemented by Barbara Liskov: See more info here: https://en.wikipedia.org/wiki/CLU_(programming_language)
+
+The yield statement creates a generator
+"""
+
+class Sentence2:
+    def __init__(self, text: str) -> 'Sentence2':
+        self.text = text
+        self.words = WORD.findall(text)
+
+    def __getitem__(self, idx: int) -> str:
+        return self.words[idx]
+
+    def __len__(self) -> int:
+        return len(self.words)
+
+    def __iter__(self) -> Iterator:
+        for word in self.words:
+            yield word
