@@ -106,3 +106,25 @@ class Sentence2:
     def __iter__(self) -> Iterator:
         for word in self.words:
             yield word
+
+
+"""
+Implementing class Sentence in a lazy way
+"""
+
+class Sentence3:
+    def __init__(self, text:str) -> None:
+        self.text = text
+
+    def __len__(self) -> int:
+        return len(self.text)
+
+    def __iter__(self) -> Iterator:
+        for mymatch in WORD.finditer(self.text):
+            yield mymatch.group()
+
+
+mysentence3 = Sentence3("Hey, como estas, todo bien? Soy la version lazy de sentence")
+
+for word in mysentence3:
+    print(word)
