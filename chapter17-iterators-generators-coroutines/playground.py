@@ -3,10 +3,13 @@ from random import randint
 def roll_dice():
     return randint(1, 6)
 
-# When you provide a second argument
-# to iter, this acts as a sentinel: When
-# the value is return by __next__, the
-# iterator stops
+"""
+When you provide a second argument
+to iter, this acts as a sentinel: When
+the value is return by __next__, the
+iterator stops. More info can be found
+here: https://docs.python.org/3.10/library/functions.html#iter
+"""
 myiter = iter(roll_dice, 1)
 
 for num in myiter:
