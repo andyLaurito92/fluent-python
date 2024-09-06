@@ -138,3 +138,8 @@ mysentence3 = Sentence3("Hey, como estas, todo bien? Soy la version lazy de sent
 
 for word in mysentence3:
     print(word)
+
+
+"""
+Note: Generator expressions are syntatic sugar for generator functions
+"""
