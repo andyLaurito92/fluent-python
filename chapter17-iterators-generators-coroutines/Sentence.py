@@ -119,9 +119,19 @@ class Sentence3:
     def __len__(self) -> int:
         return len(self.text)
 
+    # Implementation #1
+    # def __iter__(self) -> Iterator:
+    #     """
+    #     re.finditer returns a generator yielding re.MatchObject instances
+    #     on demand. This saves a lot of memory
+    #     """
+    #     for mymatch in WORD.finditer(self.text):
+    #         yield mymatch.group()
+
+    #Implementation #2. Builds a generator expression instead of the above
+    # implementation which is a generator function (has yield in it)
     def __iter__(self) -> Iterator:
-        for mymatch in WORD.finditer(self.text):
-            yield mymatch.group()
+        return (mymatch.group() for mymatch in WORD.finditer(self.text))
 
 
 mysentence3 = Sentence3("Hey, como estas, todo bien? Soy la version lazy de sentence")

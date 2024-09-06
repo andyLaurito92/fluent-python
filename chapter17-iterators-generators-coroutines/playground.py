@@ -49,3 +49,33 @@ while True:
     except StopIteration:
         del myiter
         break
+
+
+"""
+Difference between using a generator expression
+in a list (eager evaluation) vs a tuple (lazy
+evaluation)
+"""
+
+def gen_names():
+    print("First")
+    yield "Andres"
+    print("Second")
+    yield "Juan"
+    print("That's it")
+
+# In this example, you get 3 prints right away
+# This is because the list comprehesion eagerly iterates
+# over the items yielded by the generator
+mylist = [name for name in gen_names()] 
+
+print(mylist)
+
+mytuple = (name for name in gen_names())
+
+# In this second example, no print was executed
+# and we get a generator object instead
+print(mytuple)
+
+for name in mytuple:
+    print(name)
