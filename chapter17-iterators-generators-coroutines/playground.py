@@ -80,17 +80,27 @@ print(mytuple)
 for name in mytuple:
     print(name)
 
-"""
-Using iterators from itertools
-"""
-
-from itertools import count
 
 """
-itertools.count yields numbers, preety much as
-our arithmetic progression class/function
+Filtering generator functions
 """
-for i in count(10, .5):
-    print(i)
-    if i > 12:
-        break
+
+def vowel(c):
+    return c.lower() in 'aeiou'
+
+mystr = 'Abra cadabra, hehe'
+list(filter(vowel, 'Abra cadabra, hehe'))
+
+"""
+Drop while the predicate is truthy. Once it get's falsy, stop
+checking and return everything
+"""
+list(itertools.dropwhile(vowel, 'Aaaabra cadabra, hehe'))
+
+
+"""
+compress(it, selector_it)
+Consumes two iterables in parallel; yields items from it
+whenever the corresponding item in selector_it is truthy
+"""
+list(itertools.compress('AbraCadabra', (0, 1, 1, 0, 1, 1, 1, 0, 0)))
