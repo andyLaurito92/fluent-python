@@ -79,3 +79,18 @@ print(mytuple)
 
 for name in mytuple:
     print(name)
+
+"""
+Using iterators from itertools
+"""
+
+from itertools import count
+
+"""
+itertools.count yields numbers, preety much as
+our arithmetic progression class/function
+"""
+for i in count(10, .5):
+    print(i)
+    if i > 12:
+        break
