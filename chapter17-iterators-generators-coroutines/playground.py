@@ -123,14 +123,14 @@ second, and so on
 
 list(itertools.accumulate(sample))
 
-list(itertools.accumulate(sample, min))
+#list(itertools.accumulate(sample, min))
 
 """
 So we can get the min of a list in python by doing this
 """
 
-for min in itertools.accumulate(sample, min):
-    print("Min so far ", min)
+for mymin in itertools.accumulate(sample, min):
+    print("Min so far ", mymin)
 
 
 """
@@ -212,6 +212,126 @@ each iterable produced by it, one after the other, seamlessly
 list(itertools.chain.from_iterable(enumerate('ABC')))
 
 """
-Cartesian product between iterables
+Cartesian product between iterables built LAZILY
 """
 list(itertools.product([1, 3, 5, 2], range(5), 'Andres'))
+
+
+"""
+=============================================
+Generator functions that expand each input into
+multiple output items
+=============================================
+"""
+
+"""
+itertools.count -> We saw it in arithmetic progression, it
+returns a generator of infinite count
+"""
+
+mycount = itertools.count()
+for i in mycount:
+    if i > 12:
+        break
+    print(i)
+
+"""
+itertools.cycle -> yields items from it, storing a copy of each,
+then yields the entire sequence repeatedly, indefinitely
+"""
+idx = 0
+for elem in itertools.cycle('ABC'):
+    print(elem)
+    idx += 1
+    if idx > 10:
+        break
+
+
+"""
+Mixing the above generators with islice
+"""
+
+list(itertools.islice(itertools.count(1, .3), 3))
+
+list(itertools.islice(itertools.cycle('ABC'), 7))
+
+
+"""
+itertools.pairwise -> for each item in the input, pairwise
+yields a 2-tuple with that item and the next -if there is a next
+item. Available in Python3.10 >
+"""
+
+list(itertools.pairwise(range(10)))
+
+"""
+itertools.repeat --> repeat an element infinitely
+"""
+
+list(itertools.islice(itertools.repeat(9), 10)) # Faster to do [9] * 10
+
+# Repeat can be limited by passing the times argument
+list(itertools.repeat(9, 4))
+
+"""
+Common use of repeat: To use it for fixing a value with map
+"""
+
+list(map(operator.mul, [1, 3, 5, 6, 8], itertools.repeat(4)))
+
+
+
+"""
+=============================================
+Combinatorics generators, see documentation
+https://docs.python.org/3/library/itertools.html
+=============================================
+"""
+
+list(itertools.combinations('ABC', 2))
+
+list(itertools.combinations_with_replacement('ABC', 2))
+
+list(itertools.permutations('ABC', 2))
+
+list(itertools.product('ABC', repeat=2))
+
+"""
+=============================================
+Rearranging generator functions
+=============================================
+"""
+
+"""
+itertools.groupby(it, key=None) -> yields 2 tuples
+of the form (key, group), where key is the grouping
+criterio and group is a generator yielding the items
+in the group
+
+Note: itertools.groupby assumes that the input iterable
+is sorted by the grouping criterion, or at least that
+the items are clustered by that criterion - even if not
+completely sorted
+"""
+
+for val, group in itertools.groupby('LLLLAAAAGGGGG'):
+    print(val, " -> ", len(list(group)))
+
+"""
+Group words by their len. Note that we need to sort first
+the names, otherwise we can get multiple groups of unique
+length
+"""
+
+names = ['Andres', 'Gabriela', 'Jorge', 'Ramon', 'Aldana']
+names.sort(key=len)
+for val, group in itertools.groupby(names, key=len):
+    print(val, " -> ", list(group))
+
+
+"""
+reversed -> only works for sequences
+"""
+
+for name in reversed(names):
+    print(name)
