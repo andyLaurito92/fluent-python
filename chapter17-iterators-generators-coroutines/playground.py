@@ -82,7 +82,9 @@ for name in mytuple:
 
 
 """
+=============================================
 Filtering generator functions
+=============================================
 """
 
 def vowel(c):
@@ -106,11 +108,11 @@ whenever the corresponding item in selector_it is truthy
 list(itertools.compress('AbraCadabra', (0, 1, 1, 0, 1, 1, 1, 0, 0)))
 
 
-
 """
+=============================================
 Mapping generator functions
+=============================================
 """
-
 sample = [1, 2, 3, 0, 4, 1, 2, 8, 5, 3, 9 , -2, 9, 3]
 
 """
@@ -173,3 +175,43 @@ represent an object that can be destructured
 """
 # This doesn't work
 # list(map(operator.mul, enumerate('andres', 1)))
+
+
+"""
+Calculating avg on a list of numbers
+"""
+
+sample = [3, 8, 2, 1, 10, 5]
+
+list(itertools.starmap(lambda a, b: b / a,
+                       enumerate(itertools.accumulate(sample), 1)))
+
+
+"""
+=============================================
+Merge generators
+
+Note: chain and chain.from_iterable consume
+the input iterables sequentially, while
+product, zip, and zip_longest consume the
+input iterables in parallel
+=============================================
+"""
+
+"""
+chain -> yields all items from it1, then from it2, etc
+"""
+list(itertools.chain('ABC', range(2)))
+list(itertools.chain(enumerate('ABC')))
+
+
+"""
+itertools.chain.from_iterable -> yields all items from
+each iterable produced by it, one after the other, seamlessly
+"""
+list(itertools.chain.from_iterable(enumerate('ABC')))
+
+"""
+Cartesian product between iterables
+"""
+list(itertools.product([1, 3, 5, 2], range(5), 'Andres'))
