@@ -136,5 +136,22 @@ def display(class_generator):
     for cls_name, level in class_generator:
         print(" "*2*level, cls_name)
         
-display(tree(BaseException, 1))
+#display(tree(BaseException, 1))
 #display(tree(Exception, 1))
+
+"""
+Third approach: We care about identation + making the algorithm iterative instead
+of recursive for performance purposes
+"""
+
+def tree(clss, level=0):
+    classes_to_visit = [(clss, level)]
+    while classes_to_visit:
+        current, level = classes_to_visit[0]
+        classes_to_visit = classes_to_visit[1:]
+        yield (current, level)
+
+        classes_to_visit = list(zip(current.__subclasses__(), itertools.repeat(level + 1))) + classes_to_visit
+    return "Finished"
+
+display(tree(BaseException, 1))
