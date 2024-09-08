@@ -126,19 +126,15 @@ Second approach: We care about showing identation, for this we can
 use yield from for generating the branches of the subclasses
 """
 
-def tree(clss, level):
-    classes_to_visit = [(clss, level)]
-    while classes_to_visit:
-        current_clss_with_level = classes_to_visit[0]
-        classes_to_visit.remove(current_clss_with_level)
-        yield current_clss_with_level
-        current_clss, level = current_clss_with_level
-        for subclass in current_clss.__subclasses__():
-            """ We generate recursively each branch of the subclasses and yield it's value using yield from """
-            yield from tree(subclass, level + 1)
+def tree(clss, level=0):
+    yield clss, level
+    for subclass in clss.__subclasses__():
+        """ We generate recursively each branch of the subclasses and yield it's value using yield from """
+        yield from tree(subclass, level + 1)
 
 def display(class_generator):
     for cls_name, level in class_generator:
         print(" "*2*level, cls_name)
         
 display(tree(BaseException, 1))
+#display(tree(Exception, 1))
