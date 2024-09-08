@@ -163,6 +163,9 @@ Repeat each letter in the word according to its place in it
 list(itertools.starmap(operator.mul, enumerate('andres', 1)))
 # 'a' * 1, 'n' * 2, 'd' * 3
 
+# If we want to re-write the above using map, we should do sht like this:
+# list(map(lambda x: x[0] * x[1], enumerate('andres', 1)))
+
 """
 Concatenating 2 lists of strings 
 """
@@ -335,3 +338,22 @@ reversed -> only works for sequences
 
 for name in reversed(names):
     print(name)
+
+
+"""
+itertools.tee(it, n=2) -> yields a tuple of n generators, each
+yielding the items of the input iterable independently
+"""
+
+"""
+Build a tuple which contains each element in the iterable
+"""
+list(zip(*itertools.tee('ABC')))
+
+
+
+"""
+=============================================
+Reducing generator functions
+=============================================
+"""
