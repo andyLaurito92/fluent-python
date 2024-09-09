@@ -4,13 +4,14 @@ See https://github.com/python/cpython/blob/b1930bf75f276cd7ca08c4455298128d89adf
 """
 
 from collections.abc import Iterable
+from abc import abstractmethod
 
 """
 Implementation can be found here: https://github.com/python/cpython/blob/b1930bf75f276cd7ca08c4455298128d89adf7d1/Lib/_collections_abc.py#L78
 """
-from _collections_abc import _check_methods
+from _collections_abc import _check_methods #type: ignore
 
-class Iterator(abc.Iterable):
+class Iterator(Iterable):
     __slots__ = ()
 
     @abstractmethod

@@ -1,4 +1,6 @@
 from random import randint
+import itertools
+import operator
 
 def roll_dice():
     return randint(1, 6)

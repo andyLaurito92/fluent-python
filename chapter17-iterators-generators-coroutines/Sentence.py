@@ -72,6 +72,7 @@ because of item 2.
 
 The iter built in function is defined in Cpython here: https://github.com/python/cpython/blob/main/Python/bltinmodule.c#L1667
 """
+from collections.abc import Iterable
 
 class Spam:
     def __getitem__(self, i):

@@ -1,7 +1,7 @@
 """
 Using iterators from itertools
 """
-
+import os
 from itertools import count, takewhile
 
 """

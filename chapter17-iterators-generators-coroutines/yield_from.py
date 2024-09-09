@@ -1,5 +1,10 @@
+#type: ignore
 """
-Introducing yield from syntax, which delegates work to a subgenerator
+Introducing yield from syntax, which delegates work to a subgenerator.
+yield from connects the subgenerator directly to the client code, bypassing
+the delgating generator.
+
+To read: https://stackoverflow.com/questions/9708902/in-practice-what-are-the-main-uses-for-the-yield-from-syntax-in-python-3-3
 """
 
 """
