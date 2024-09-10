@@ -1,8 +1,9 @@
 from collections.abc import Generator
+from typing import TypeAlias, NamedTuple
 
 def averager() -> Generator[float, float, None]:
     total = 0
-    sum = 0
+    sum = 0.0
     average = 0.0
     while True:
         term = yield average
@@ -42,9 +43,77 @@ BUT: If you want to terminate it, you can use .close() on the coroutine
 """
 
 print(coro_avg.send(16))
+
+"""
+The .close() method raises GeneratorExit at the suspended yield expression.
+If not handled in the coroutine function, the exception terminates it.
+GeneratorExit is caught by the generator object that wraps the coroutine,
+that's why we don't see it
+"""
 coro_avg.close()
 
 try: 
     print(coro_avg.send(17))
 except Exception as e:
     print("Exception raised ", type(e))
+
+
+"""
+Second averager example: Instead of returning partial results, return a
+complete result after receiveing multiple numbers
+"""
+
+class Result(NamedTuple):
+    """
+    We need to type ignore this field because NamedTuple is a subclass of
+    tuple, and tuple implements method count, which counts the number of
+    repetitions of the argument in the tuple
+    """
+    count: int # type: ignore
+    average: float
+
+class Sentinel:
+    def __repr__(self):
+        return "Sentinel()"
+
+
+FloatsOrStop: TypeAlias = float | Sentinel
+
+# Remember Generator nomenclature: Generator[YieldType, ReceiverType, ReturnType]
+def averager2() -> Generator[None, FloatsOrStop, Result]:
+    total = 0
+    sum = 0.0
+    average = 0.0
+    while True:
+        term = yield
+        if isinstance(term, Sentinel):
+            break
+
+        sum += term
+        total += 1
+        average = sum / total
+    return Result(total, average)
+
+
+avg2 = averager2()
+# Priming the averager
+next(avg2)
+
+for i in range(10):
+    # Now the yield type is None
+    print(avg2.send(i))
+
+# Until we don't send the sentinel, we don't get the average
+try:
+    avg2.send(Sentinel())
+except StopIteration as e:
+    res = e.value
+
+print("Res was ", res)
+# A this point the averager2 has returned, which means that
+# we cannot send more values to the coroutine
+
+try:
+    avg2.send(10)
+except Exception as e:
+    print("Exception raised when sending 10: ", type(e))
