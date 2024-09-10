@@ -117,3 +117,38 @@ try:
     avg2.send(10)
 except Exception as e:
     print("Exception raised when sending 10: ", type(e))
+
+
+"""
+Note that if we call close on a coroutine object produced by
+averager2 it won't return a result. This is bc when calling close(),
+GeneratorExit exception is raised at the yield line in the coroutine
+"""
+
+testing_coroutine = averager2()
+next(testing_coroutine)
+print(testing_coroutine.send(10))
+print(testing_coroutine.send(11))
+
+# Doesn't return an average
+print(testing_coroutine.close())
+
+
+"""
+If we want to directly read the value returned by a coroutine, we can
+use yield from like follows:
+"""
+
+def compute_avg():
+    avg = averager2()
+    res = yield from avg
+    return res
+
+compute_gen = compute_avg()
+for i in [None, 1, 2, 3, 4, 5, Sentinel()]:
+    try:
+        compute_gen.send(i)
+    except StopIteration as e:
+        res = e.value
+
+print("Avg is: ", res)
