@@ -91,12 +91,12 @@ except Exception as e:
     print(type(e), e)
 
 
-def another_coroutine(first: int) -> Generator[int, int, None]:
-    print("This is ", first)
-    second = yield first + 10
-    print("Second is ", second)
-    third = yield first + second
-    print("Last one is ", third)
+def another_coroutine(received: int) -> Generator[int, int, None]:
+    print("This is ", received)
+    first = yield received + 10
+    print("first value is  ", first)
+    second = yield first + received 
+    print("Last one is ", second)
     
 
 second_coroutine = another_coroutine(11)
