@@ -110,3 +110,48 @@ try:
 except StopIteration as e:
     print(first_yielded_value, second_yielded_value)
 
+
+
+"""
+Given that we always need to prime a coroutine to make it work,
+we could build a decorator for this:
+"""
+
+from functools import wraps
+
+"""
+Note: The original decorator from the fluentpython webpage doesn't stores the
+result of next because it assumes that it's None (and for the case being used,
+this is true :) ) I'm storing the result of next and returning a tuple to make
+this decorator more generic and to remember and important concept: When next()
+is called in a coroutine object, this call makes the generator run until the
+first yield expression. This expression MIGHT OR MIGHT NOT yield a value. If it
+doesn't, then res will be None. If it does, res will have that value and won't
+get lost
+"""
+
+def coroutine(func):
+    """
+    Decorator to prime a coroutine. This decorator expects the generator factory
+    and returns a generator factory that primes the gnerator objects created
+    """
+    @wraps(func)
+    def prime(*args, **kwargs):
+        my_coroutine = func(*args, **kwargs)
+        # we prime the coroutine
+        res = next(my_coroutine)
+        return (my_coroutine, res)
+    return prime
+
+@coroutine
+def coroutine_decorated(sht: str) -> Generator[str, str, None]:
+    print("Hey ", sht)
+    val = yield sht + ", ho"
+    print("Received ", val)
+    last_val = yield val + sht
+    print("Last val: ", last_val, " finishing now.")
+    
+
+co, res = coroutine_decorated("ho")
+
+inspect.getgeneratorstate(co)
