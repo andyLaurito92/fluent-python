@@ -1,11 +1,26 @@
 #type: ignore
 """
-Introducing yield from syntax, which delegates work to a subgenerator.
-yield from connects the subgenerator directly to the client code, bypassing
-the delgating generator.
+Introducing yield from syntax, which delegates work to a subgenerator. When delegating work,
+the subgen takes over and will yield values to the caller of gen. The caller will in effect
+drive subgent directly. Meanwhile gen will be blocked, waiting until subgen terminates.
+
+yield from connects the subgenerator directly to the client code, bypassing the delgating generator. 
 
 To read: https://stackoverflow.com/questions/9708902/in-practice-what-are-the-main-uses-for-the-yield-from-syntax-in-python-3-3
+
+IMPORTANT NOTE
+
+The newer await keyword is very similar to yield from, however await does not completely replace yield from.
+Each of them has its own use cases, and await is more strict about its context and target: await can
+only be used inside a native coroutine, and its target must be ana waitable object. In contrast, yield from
+can be used in any function (which then becomes a generator), and its target can be any iterable. 
 """
+print("Example of a fn that can be written with yield from but not with await")
+
+def example():
+    yield from [1, 2, 3]
+
+print(list(example()))
 
 """
 Before yield from
@@ -160,3 +175,50 @@ def tree(clss, level=0):
     return "Finished"
 
 display(tree(BaseException, 1))
+
+
+"""
+What's doing underneath the "yield from x" expression?
+
+The first thing it does is to to call iter(x) to obtain an iterator from it.
+
+This means that x can be any iterable ! <--- IMPORTANT!
+
+Note something: Because yield from opens a bidirectional channel from
+the outermost caller to the innermost subgenerator, exceptions can be
+thrown all the way in without adding a lot of exception handling
+boilerplate code in the intermediate coroutines!
+
+Let's see the above in an example:
+"""
+
+# For logging the last traceback
+import traceback
+
+def co_boom():
+    print("Will explode everything!")
+    yield 3
+    raise TypeError("Oops!")
+
+def co_inner():
+    print("Running an inner coroutine")
+    yield 1
+    # delegates to other coroutine
+    yield from co_boom()
+
+def co_outer():
+    print("I'm visible to the caller")
+    yield 30
+    yield from co_inner()
+    
+print("I'm the caller!")
+my_co = co_outer()
+
+print("Priming the coroutine")
+print("30!, ", next(my_co))
+try:
+    print("Starting iteration")
+    for elem in my_co:
+        print(elem)
+except Exception as e:
+    print("Something happened inside!", e, traceback.format_exc())
