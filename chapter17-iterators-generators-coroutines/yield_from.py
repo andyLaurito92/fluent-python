@@ -1,5 +1,7 @@
 #type: ignore
 """
+Yield from was introduced in PEP-0380: https://peps.python.org/pep-0380/
+
 Introducing yield from syntax, which delegates work to a subgenerator. When delegating work,
 the subgen takes over and will yield values to the caller of gen. The caller will in effect
 drive subgent directly. Meanwhile gen will be blocked, waiting until subgen terminates.
@@ -222,3 +224,91 @@ try:
         print(elem)
 except Exception as e:
     print("Something happened inside!", e, traceback.format_exc())
+
+
+"""
+
+PIPELINES WITH COROUTINES
+
+Note: If you look at example extra-classic-coroutines/example_17.py you will get a sense of
+how to create pipelines with coroutines. If you chain multiple yield from expressions in continuos
+coroutines, you allow data to flow between the caller/user of the outer coroutine, and the first
+coroutine that implements a simple yield (this is the beauty of control flow provided by coroutines)
+
+Note: Every yield from chain must be driven by a client that calls either next() or .send(). Note that
+these calls can be hidden/implicit, such as in a for loop.
+"""
+
+"""
+How does yield from works underneath? The following code shows its behaviour
+(this example code comes from both fluentpython and pep380)
+
+yield from EXPR equals to:
+
+FIRST CASE: WITHOUT HANDLING close() AND throw()
+
+_i = iter(EXPR) # EXPR can be ANY iterable (is not necesarily a coroutine)
+try:
+   # Prime the coroutine (in case we have a coroutine) or
+   # initialize _y
+  _y = next(_i)
+except StopIteration as e:
+  _r = e.value
+else:
+  while True:
+   # We pass the value to the caller and
+   # yield for the next value to send to the
+   # delegate coroutine
+    _next = yield _y
+    try:
+      _y = _i.send(_next)
+    except StopIteration as ex:
+      _r = ex.value
+      break
+
+# Note that we are coding the yield from expression, therefore we cannot
+# use RETURN because we would be exiting the generator code (not the delegating
+# generator, but the one who is being used as pipeline), which is not the behaviour
+# that yield from has. Once we have consumed all elements from the delegated coroutine,
+# we must keep executing this generator code
+RESULT = _r 
+
+What if the delegate coroutine throws an exception, or if the client
+calls either close() or throws?. We need to implement the following:
+
+- Exceptions other than GeneratorExit thrown into the delegating generator
+are passed to the throw() method of the subgenerator. If the call raises StopIteration,
+the delegating generator is resumed. Any other exception is propagated to the delegating generator.
+
+- If a GeneratorExit exception is thrown into the delegating generator, or the close()
+method of the delegating generator is called, then the close() method of the
+subgenerator is called if it has one. If this call results in an exception,
+it is propagated to the delegating generator. Otherwise, GeneratorExit is raised
+in the delegating generator.
+
+_i = iter(EXPR) # EXPR can be ANY iterable (is not necesarily a coroutine)
+try:
+   # Prime the coroutine (in case we have a coroutine) or
+   # initialize _y
+  _y = next(_i)
+except StopIteration as e:
+  _r = e.value
+else:
+  while True:
+   # We pass the value to the caller and
+   # yield for the next value to send to the
+   # delegate coroutine
+    _next = yield _y
+    try:
+      _y = _i.send(_next)
+    except StopIteration as ex:
+      _r = ex.value
+      break
+    except GeneratorExit as ex:
+      _i.close()
+      raise GeneratorExit
+    except Exception as e:
+      _i.throw(e)
+
+"""
+
