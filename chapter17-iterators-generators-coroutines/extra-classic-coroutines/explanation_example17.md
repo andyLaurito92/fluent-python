@@ -2,7 +2,7 @@
 
 The example comes from https://www.fluentpython.com/extra/classic-coroutines/#async_ch
 
-[Architecture of example 17](https://www.fluentpython.com/extra/classic-coroutines/images/yield-channel.png)
+![Architecture of example 17](https://www.fluentpython.com/extra/classic-coroutines/images/yield-channel.png)
 
 Code can be seen here and executed from file example_17.py
 
