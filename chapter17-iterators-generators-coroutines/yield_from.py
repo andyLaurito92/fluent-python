@@ -286,6 +286,8 @@ subgenerator is called if it has one. If this call results in an exception,
 it is propagated to the delegating generator. Otherwise, GeneratorExit is raised
 in the delegating generator.
 
+The following shows the full code of what yield from EXPR does (REMEMBER, THIS IS YIELD FROM EXPR)
+
 _i = iter(EXPR) # EXPR can be ANY iterable (is not necesarily a coroutine)
 try:
    # Prime the coroutine (in case we have a coroutine) or
@@ -294,23 +296,47 @@ try:
 except StopIteration as e:
   _r = e.value
 else:
+ try:
   while True:
    # We pass the value to the caller and
    # yield for the next value to send to the
    # delegate coroutine
-    _next = yield _y
     try:
-      _y = _i.send(_next)
-    except StopIteration as ex:
-      _r = ex.value
-      break
-    except GeneratorExit as ex:
-       # Remember that _i could be a plain iterator that doesn't support
-       # neither close() nor throw() calls
-      _i.close()
-      raise GeneratorExit
+      _next = yield _y
+    #Exception raise while yielding value
+    except GeneratorExit as e:
+      if isinstance(_i, Generator):
+         _i.close()
+      raise e
     except Exception as e:
-      _i.throw(e)
+      #Exceptions other than GeneratorExit thrown into the delegating
+      #generator are passed to the throw() method of the subgenerator
+
+      # Remember that _i could be a plain iterator that doesn't support
+      # neither close() nor throw() calls
+      if isinstance(_i, Generator):
+          #implements throw
+          try: 
+             _next = _i.throw(e)
+          except StopIteration as e:
+             _r = e.value
+             break
+      else:
+          raise e
+    else: # No exception raised while yielding value
+      try:
+          # Finally, as an optimization, if the caller calls next(…) or .send(None),
+          # both are forwarded as a next(…) call on the subgenerator; only if the caller
+          # sends a non-None value, the .send(…) method of the subgenerator is used.
+          if _next is None:
+             next(_i)
+          else:
+             _y = _i.send(_next)
+      except StopIteration as ex:
+          _r = ex.value
+          break
+ except StopIteration as e:
+  # continue with this generator
 
 """
 
