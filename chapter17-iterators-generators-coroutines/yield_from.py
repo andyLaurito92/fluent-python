@@ -305,6 +305,8 @@ else:
       _r = ex.value
       break
     except GeneratorExit as ex:
+       # Remember that _i could be a plain iterator that doesn't support
+       # neither close() nor throw() calls
       _i.close()
       raise GeneratorExit
     except Exception as e:
