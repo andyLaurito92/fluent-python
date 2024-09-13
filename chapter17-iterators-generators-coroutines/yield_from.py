@@ -240,6 +240,8 @@ these calls can be hidden/implicit, such as in a for loop.
 """
 
 """
+YIELD FROM IMPLEMENTATION
+
 How does yield from works underneath? The following code shows its behaviour
 (this example code comes from both fluentpython and pep380)
 
