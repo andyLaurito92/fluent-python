@@ -88,3 +88,9 @@ if __name__ == '__main__':
         raise ValueError(f"Expecting only the number of taxis to simulate, received: {sys.argv}")
     sim = TaxiSimulation(int(sys.argv[1]))
     sim.run()
+
+
+"""
+TODO: Re-implement the above code using a priority queue and pushing events into it
+(this would be more DES - discrete event simulation oriented)
+"""
