@@ -342,3 +342,6 @@ else:
 
 """
 
+"""
+Note from the above: yield from subgenerator() assumes the subgenerator is not primed, and primes it automatically.
+"""
