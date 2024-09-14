@@ -64,7 +64,7 @@ class TaxiSimulation:
             taxi = Taxi(i, randint(1, 10))
             self.taxis.append((taxi, taxi.simulate()))
 
-    def start(self) -> None:
+    def run(self) -> None:
         time = 0
         print("Starting simulation")
         while self.taxis:
@@ -87,4 +87,4 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         raise ValueError(f"Expecting only the number of taxis to simulate, received: {sys.argv}")
     sim = TaxiSimulation(int(sys.argv[1]))
-    sim.start()
+    sim.run()
