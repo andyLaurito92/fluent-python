@@ -57,7 +57,14 @@ with LookingGlass() as what:
     print(what)
     # The zero division error is handled by the
     # context manager object
-    print(1/0)
+    # print(1/0)
+    # raise ZeroDivisionError("Something")
 
 print(what)
 print("What was that!?")
+
+
+"""
+Note: If __exit__ returns None or any falsy value, any exception
+raised in the with block will be propagated
+"""
