@@ -68,3 +68,34 @@ print("What was that!?")
 Note: If __exit__ returns None or any falsy value, any exception
 raised in the with block will be propagated
 """
+
+"""
+An example of a context manager for temporarily redirecting sys.stdout
+otuput to another file-like object is contextlib.redirect_stdout:
+
+https://docs.python.org/3/library/contextlib.html#contextlib.redirect_stdout
+"""
+from contextlib import redirect_stdout
+import io
+
+with redirect_stdout(io.StringIO()) as f:
+    help(pow)
+s = f.getvalue()
+
+print(s)
+
+
+"""
+Note: Since Python 3.10 we can write
+
+with (
+ ctxmanager1() as ctx1,
+ ctxmanager2() as ctx2,
+ ctxmanager3() as ctx3,
+):
+ something
+
+This is thx to the replacement of LL(1) parser to
+a PEG based parser https://peps.python.org/pep-0617/
+
+"""
