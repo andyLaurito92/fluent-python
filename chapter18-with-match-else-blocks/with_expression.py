@@ -99,3 +99,48 @@ This is thx to the replacement of LL(1) parser to
 a PEG based parser https://peps.python.org/pep-0617/
 
 """
+
+"""
+Review the contextlib library which contains many context
+manager classes than can be useful :)
+
+https://docs.python.org/3/library/contextlib.html
+"""
+
+"""
+Implementing the looking glass class with decorator contextlib.contextmanager
+"""
+
+from contextlib import contextmanager
+
+@contextmanager
+def looking_glass2():
+    original_write = sys.stdout.write
+    sys.stdout.write = lambda txt: original_write(txt[::-1])
+    """
+    Up to this point we have the __enter__ method of our
+    context manager. The below yielded value will be assigned
+    to the variable in the AS statement. Yield gives back
+    control to the with statement
+    """
+    yield 'ABRACADABRA'
+
+    """
+    From now own, this code represents the __exit__ part of
+    our context manager
+    """
+    sys.stdout.write = original_write
+
+    """
+    What about the 3 values that the __exit__ method receives?
+    raise_type, raise_exce, traceback. How do we handle those
+    here?
+    """
+
+with looking_glass2() as magic_word:
+    print("magic_word is ", magic_word)
+    print("Looks weird")
+    print("Goodbye!")
+
+print("Back to normal :)")
+print("magic word was: ", magic_word)
