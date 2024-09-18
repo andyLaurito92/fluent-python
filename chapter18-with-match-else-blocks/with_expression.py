@@ -207,3 +207,24 @@ Having a try/finally around the yield is an unavoidable price
 of using @contextmanager, because you never know what the users
 of your context manager are going to do inside the with block
 """
+
+"""
+Final note on @contextmanager decorator: You can use your
+decorated generators as decorators!
+"""
+
+print("Using looking glass 3 as a decorator")
+@looking_glass3()
+def printing_weird():
+    print("How's this possible?")
+
+
+printing_weird()
+
+print("This works fine")
+
+
+"""
+Example of using contextmanager decorator for doing inplace write in file:
+https://www.zopatista.com/python/2013/11/26/inplace-file-rewriting
+"""
