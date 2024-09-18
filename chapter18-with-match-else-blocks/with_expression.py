@@ -115,6 +115,7 @@ from contextlib import contextmanager
 
 @contextmanager
 def looking_glass2():
+    """ Some documentation """
     original_write = sys.stdout.write
     sys.stdout.write = lambda txt: original_write(txt[::-1])
     """
@@ -135,6 +136,14 @@ def looking_glass2():
     What about the 3 values that the __exit__ method receives?
     raise_type, raise_exce, traceback. How do we handle those
     here?
+
+    Res: See implementation of class _GeneratorContextManager,
+    which is the context manager wrapper class of this function
+    In particular, in this line https://github.com/python/cpython/blob/8afab2ebbc1b343cd88d058914cf622fe687a2be/Lib/contextlib.py#L153
+    if an exception was raised by the caller, method throws of
+    generator is called (gen.throw(typ, value, traceback). So
+    that means that if we want to handle exceptions in our generator,
+    we need to wrap yield expression with a try: except clause
     """
 
 with looking_glass2() as magic_word:
@@ -144,3 +153,57 @@ with looking_glass2() as magic_word:
 
 print("Back to normal :)")
 print("magic word was: ", magic_word)
+
+
+"""
+Note: Be aware that looking_glass2 has a bug! Given that we are
+not catching any exception that might be raised by the internal
+code block of the with statement, if an exception is raised, the
+sys.stdout.write function will never get to it's original state!
+
+Let's see this problem:
+"""
+original_std_write = sys.stdout.write
+try:
+    with looking_glass2() as something:
+        print("Let's break everything!")
+        raise ValueError("Boom!")
+except ValueError as e:
+    print("Don't worry! I'll handle it ", e)
+
+print("Okay, back to our lifes")
+print("Oh, no!")
+
+print("Don't worry")
+sys.stdout.write = original_std_write
+print("That's, it, done :)")
+
+"""
+Let's fix the above
+"""
+
+@contextmanager
+def looking_glass3():
+    original_write = sys.stdout.write
+    sys.stdout.write = lambda txt: original_write(txt[::-1])
+
+    msg = ''
+    try:
+        yield "ABRACADABRA"
+    except Exception as e:
+        msg = "Handling exception in the ctx manager"
+    finally:
+        sys.stdout.write = original_write
+        print(msg)
+
+with looking_glass3() as something:
+    print("Trying to break looking glass 3")
+    raise ValueError("Boom!")
+
+print("Everything is okay")
+
+"""
+Having a try/finally around the yield is an unavoidable price
+of using @contextmanager, because you never know what the users
+of your context manager are going to do inside the with block
+"""
