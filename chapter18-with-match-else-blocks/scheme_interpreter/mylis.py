@@ -18,6 +18,7 @@ Symbol: TypeAlias = str
 Atom: TypeAlias = float | int | Symbol
 Expression: TypeAlias = Atom | list
 
+MATHS_OPERATORS = {'+': op.add, '-': op.sub, '*': op.mul, '/': op.truediv}
 
 """
 The parser
@@ -57,14 +58,44 @@ def parse_atom(token: str) -> Atom:
            return Symbol(token)
         
 
+
+"""
+Eval
+"""
+
+def eval(expression: Expression) -> Expression:
+    if not isinstance(expression, list):
+        return expression
+    
+    if len(expression) == 0:
+        return None
+
+    symbol = expression.pop(0)
+    match symbol:
+        case int(a):
+            return a 
+        case float(a):
+            return a
+        case '+' | '-' | '*' | '/':
+            first_operand = expression.pop(0)
+            second_operand = expression.pop(0)
+            operator = MATHS_OPERATORS[symbol]
+            return operator(eval(first_operand), eval(second_operand))
+        case _:
+            return expression
+    
 def run_interpreter():
+    msg_stop = "Stopping interpreter"
     try:
         print("Starting scheme interpreter")
         while True:
-            exp = input()
-            print(parse(exp))
+            exp = input("lis.py> ")
+            if exp == 'exit()':
+                print(msg_stop)
+                return
+            print(eval(parse(exp)))
     except KeyboardInterrupt as e:
-        print("Stopping interpreter")
+        print("\n", msg_stop)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1: # Only file received 
