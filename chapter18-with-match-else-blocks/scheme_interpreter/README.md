@@ -7,3 +7,5 @@ Some useful resources:
 
 Once you have studied the aboves, continue with this [other implementation](http://norvig.com/lispy2.html) by Peter. It contains some 
 improvements on the original interpreter
+
+The goal of this implementation is to show the patter matching capabilities of Python
