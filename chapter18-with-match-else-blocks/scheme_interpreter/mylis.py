@@ -1,14 +1,15 @@
-"""
-This first implementation of a Scheme interpreter cannot handle string data, comments
-macros, and other features of standard Scheme that make parsing more complicated
-"""
-
 import sys
 import math
 import operator as op
 from collections import ChainMap
 from itertools import chain
 from typing import Any, TypeAlias, NoReturn
+
+"""
+This first implementation of a Scheme interpreter cannot handle string data, comments
+macros, and other features of standard Scheme that make parsing more complicated
+"""
+
 
 """
 Types
@@ -62,28 +63,6 @@ def parse_atom(token: str) -> Atom:
 """
 Eval
 """
-def eval(expression: Expression) -> Expression:
-    if not isinstance(expression, list):
-        return expression
-    
-    if len(expression) == 0:
-        return None
-
-    symbol = expression.pop(0)
-    match symbol:
-        case int(a):
-            return a 
-        case float(a):
-            return a
-        case '+' | '-' | '*' | '/':
-            first_operand = expression.pop(0)
-            second_operand = expression.pop(0)
-            operator = MATHS_OPERATORS[symbol]
-            return operator(eval(first_operand), eval(second_operand))
-        case _:
-            return expression
-    
-
 """
 Environment variables
 """
@@ -140,11 +119,45 @@ def standard_env() -> Environment:
         })
     return env
 
+
+KEYWORDS = ['quote', 'if', 'lambda', 'define', 'set!']
+
+def eval(expression: Expression, env: Environment) -> Any:
+    "Evaluate an expresion in an environment"
+    match expression:
+        case int(x) | float(x):
+            return x
+        case Symbol(var):
+            return env[var]
+        case ['quote', x]:
+            return x
+        case ['if', test, consequence, alternative]:
+            if eval(test, env):
+                return eval(consequence, env)
+            else:
+                return eval(alternative, env)
+        case ['lambda', [*params], *body] if body:
+            return Procedure(params, body, env)
+        case ['define', Symbol(name), value_exp]:
+            env[name] = eval(value_exp, env)
+        case ['define', [Symbol(name), *params], *body] if body:
+            env[name] = Procedure(params, body, env)
+        case ['set!', Symbol(name), value_exp]:
+            env.change(name, eval(value_exp, env))
+        case [func_exp, *args] if func_exp not in KEYWORDS:
+            proc = eval(func_exp, env)
+            values = [eval(arg, env) for arg in args]
+            return proc(*values)
+        case _:
+            raise SyntaxError(lispstr(exp))
+
+
 """
-Repl
+Repl: Read- Eval- Print - Loop
 """
-def repl():
+def repl() -> None:
     msg_stop = "Stopping interpreter"
+    global_env = Environment({}, standard_env())
     try:
         print("Starting scheme interpreter")
         while True:
@@ -152,9 +165,16 @@ def repl():
             if exp == 'exit()':
                 print(msg_stop)
                 return
-            print(eval(parse(exp)))
+            print(eval(parse(exp), global_env))
     except KeyboardInterrupt as e:
         print("\n", msg_stop)
+
+def lispstr(exp: object) -> str:
+    "Convert a Python object back into a lisp string"
+    if isinstance(exp, list):
+        return '(' + ' '.join(map(lispstr, exp)) + ')'
+    else:
+        return exp
 
 if __name__ == '__main__':
     if len(sys.argv) == 1: # Only file received 
@@ -166,3 +186,4 @@ if __name__ == '__main__':
             print(parse(fp.readall()))
     else:
         raise ValueError(f"Expecting either 1 file or no argument to start the interpreter. Received: {sys.argv}")
+
