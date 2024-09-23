@@ -3,6 +3,7 @@ from time import perf_counter
 from typing import NamedTuple, TypeAlias
 from multiprocessing import Process, SimpleQueue, cpu_count
 from multiprocessing import queues
+from threading import Thread
 
 from primes import is_prime, NUMBERS
 
@@ -27,30 +28,45 @@ def worker(jobs:JobQueue, results: ResultQueue) -> None:
 
 
 def start_jobs(
-        procs: int, jobs: JobQueue, results: ResultQueue
+        procs: int, jobs: JobQueue, results: ResultQueue,
+        worker_type: Process | Thread
         ) -> None:
     for n in NUMBERS:
         jobs.put(n)
 
     for _ in range(procs):
-        proc = Process(target=worker, args=(jobs, results))
+        proc = worker_type(target=worker, args=(jobs, results))
         proc.start()
         jobs.put(0) # A posion pill to kill a process
 
-        
-def main() -> None:
+def parse_args() -> tuple[int, Process|Thread]:
     if len(sys.argv) < 2:
         procs = cpu_count()
+        procs_type = Process
     else:
         procs = int(sys.argv[1])
+        try:
+            procs_type = sys.argv[2]
+            if procs_type == 'process':
+                procs_type = Process
+            else:
+                procs_type = Thread
+        except IndexError:
+            procs_type = Process
+
+    return (procs, procs_type)
+    
         
-    print(f'Checking {len(NUMBERS)} numbers with {procs} processes:')
+def main() -> None:
+    procs, procs_type = parse_args()
+
+    print(f'Checking {len(NUMBERS)} numbers with {procs} processes with {procs_type}:')
 
     t0 = perf_counter()
     jobs: JobQueue = SimpleQueue()
     results: ResultQueue = SimpleQueue()
 
-    start_jobs(procs, jobs, results)
+    start_jobs(procs, jobs, results, Process)
 
     checked = report(procs, results)
     elapsed = perf_counter() - t0
