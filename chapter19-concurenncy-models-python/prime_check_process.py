@@ -15,7 +15,7 @@ JobQueue: TypeAlias = queues.SimpleQueue[int]
 ResultQueue: TypeAlias = queues.SimpleQueue[PrimeResult]
 
 
-def check(n: int) -> Result:
+def check(n: int) -> PrimeResult:
     t0 = perf_counter()
     prime = is_prime(n)
     return PrimeResult(n, prime, perf_counter() - t0)
@@ -60,7 +60,12 @@ def report(procs: int, results: ResultQueue) -> int:
     checked = 0
     procs_done = 0
     while procs_done < procs:
-        n, prime, elapsed = results.get()
+        # get is a blocking method. if we want to make it non blocking,
+        # we can send a False as first argument, but this returns an
+        # Empty exceptin in case of none result. See
+        # https://docs.python.org/3/library/queue.html#queue.SimpleQueue.get
+        # for more info
+        n, prime, elapsed = results.get() 
         if n == 0:
             procs_done += 1
         else:
