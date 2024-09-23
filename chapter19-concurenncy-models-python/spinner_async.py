@@ -1,6 +1,7 @@
 import asyncio
 import itertools
 import time
+import math
 
 async def spin(msg: str) -> None:
     for char in itertools.cycle(r'\|/-'):
@@ -13,8 +14,30 @@ async def spin(msg: str) -> None:
     blanks = ' ' * len(status)
     print(f'\r{blanks}\r', end='')
 
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+
+    sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+        # If we want to make is_prime a native coroutine,
+        # we could implement the following:
+        # if n % 100_000 == 0: # After 50.000 iterations
+        #    await asyncio.sleep(.5)
+        # The above will make the is_prime function to give
+        # back control to the event loop, but it will also cause
+        # the function to be more slow
+    return True
+
 async def slow() -> int:
-    await asyncio.sleep(3)
+    is_prime(5_000_111_000_222_021)
+    #await asyncio.sleep(3)
 
     # If you uncomment the below line, and comment the above line
     # (await asyncio.sleep) you won't see any processing message at all!

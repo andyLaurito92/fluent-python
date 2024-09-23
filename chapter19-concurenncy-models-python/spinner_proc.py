@@ -1,5 +1,6 @@
 import itertools
 import time
+import math
 from multiprocessing import Process, Event
 from multiprocessing import synchronize # We need to import this to write a type hint
 
@@ -14,13 +15,31 @@ def spin(msg: str, done: synchronize.Event) -> None:
     blanks = ' ' * len(status)
     print(f'\r{blanks}\r', end='')
 
+# Intensive CPU function
+# This function is coming from here: 
+# https://docs.python.org/3/library/concurrent.futures.html#processpoolexecutor-example
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+
+    sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+
 # Call by the main thread. This could be a slow API call over
 # the network. Calling sleep blocks the main thread, but releases
 # the GIL, allowing other Python threads to run
 # 
 def slow() -> int:
-    time.sleep(3)
-    return "Done!"
+    #time.sleep(3)
+    res = is_prime(5_000_111_000_222_021)
+    return f"Done!, {res}"
 
 def supervisor():
     done = Event()
