@@ -1,8 +1,12 @@
+import sys
 import time
+from enum import StrEnum
 from pathlib import Path
 from typing import Callable
+from concurrent import futures
 
 import httpx
+
 
 POP20_CC = ('CN IN US ID BR PK NG BD RU JP '
             'MX PH VN ET EG DE IR TR CD FR').split()
@@ -20,16 +24,30 @@ def get_flag(cc: str) -> bytes:
     resp.raise_for_status()
     return resp.content
 
-def download_many(cc_list: list[str]) -> int:
+def download_and_save_flag(cc: str) -> None:
+    image = get_flag(cc)
+    save_flag(image, f'{cc}.gif')
+    # Change end character which defaults to \n to space
+    # flush=True bc by default, Python output is line buffered!
+    # Meaning that Python only displays printed characters AFTER
+    # a line break
+    print(cc, end=' ', flush=True)
+
+def download_many_sequentially(cc_list: list[str]) -> int:
     for cc in sorted(cc_list):
-        image = get_flag(cc)
-        save_flag(image, f'{cc}.gif')
-        # Change end character which defaults to \n to space
-        # flush=True bc by default, Python output is line buffered!
-        # Meaning that Python only displays printed characters AFTER
-        # a line break
-        print(cc, end=' ', flush=True)
+        download_and_save_flag(cc)
     return len(cc_list)
+
+
+def download_concurrently_threads(cc_list: list[str]) -> int:
+    with futures.ThreadPoolExecutor() as threads:
+        res = threads.map(download_and_save_flag, sorted(cc_list))
+
+
+def download_concurrently_processes(cc_list: list[str]) -> int:
+    with futures.ProcessPoolExecutor() as processes:
+        res = processes.map(download_and_save_flag, sorted(cc_list))
+
 
 def main(downloader: Callable[[list[str]], int]) -> None:
     DEST_DIR.mkdir(exist_ok=True)
@@ -40,4 +58,9 @@ def main(downloader: Callable[[list[str]], int]) -> None:
 
 
 if __name__ == '__main__':
-    main(download_many)
+    if len(sys.argv) < 2:
+        main(download_many_sequentially)
+    elif sys.argv[1] == 'threads':
+        main(download_concurrently_threads)
+    else:
+        main(download_concurrently_processes)
