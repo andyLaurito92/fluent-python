@@ -62,6 +62,8 @@ def download_many_with_futures(cc_list: list[str]) -> int:
     return count
 
 
+# Both ThreadPoolExecutor and ProcessPoolExecutor implement the
+# abstract class https://docs.python.org/3.10/library/concurrent.futures.html#concurrent.futures.Executor
 def download_concurrently_threads(cc_list: list[str]) -> int:
     # The executor __exit__ method will call executor.shutdown(await=True),
     # which will block untill all threads are done
