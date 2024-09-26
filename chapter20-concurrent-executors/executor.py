@@ -37,6 +37,8 @@ def main() -> None:
     t0 = perf_counter()
     numbers = sorted(NUMBERS, reverse=True)
     with executor:
+        # executor.map returns the PrimeResult instances returned by check
+        # IN THE SAME ORDER as the numbers argument
         for n, prime, elapsed in executor.map(check, numbers):
             label = 'P' if prime else ' '
             print(f'{n:16} {label} {elapsed:9.6f}s')
