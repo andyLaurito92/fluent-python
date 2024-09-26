@@ -1,3 +1,4 @@
+import sys
 from time import sleep, strftime
 from concurrent import futures
 
@@ -14,11 +15,29 @@ def loiter(n):
     return n * 10
 
 def main():
-    display('Script starting.')
-    executor = futures.ThreadPoolExecutor(max_workers=3)
-    results = executor.map(loiter, range(5))
+    max_workers = 3
+    num_loiters = 5
+    if len(sys.argv) == 2:
+        max_workers = int(sys.argv[1])
+    elif len(sys.argv) == 3:
+        max_workers = int(sys.argv[1])
+        num_loiters = int(sys.argv[2])
+    display(f'Script starting with {max_workers}.')
+    executor = futures.ThreadPoolExecutor(max_workers=max_workers)
+    results = executor.map(loiter, range(num_loiters))
     display('results:', results)
     display('Waiting for individual results:')
+
+    """
+    enumerate calls next(results) which in turn will invoke
+    _f.result() on the (internal) _f future representing the
+    first call, loiter(0). The result method will block until
+    the future is done, therefore each itertation in this loop
+    will have to wait for the next result to be ready
+
+    You can check the implementation of map here:
+    https://github.com/python/cpython/blob/main/Lib/concurrent/futures/_base.py#L575
+    """
     for i , result in enumerate(results):
         display(f'result {i}: {result}')
 
