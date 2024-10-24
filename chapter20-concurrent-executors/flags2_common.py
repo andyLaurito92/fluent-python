@@ -55,7 +55,7 @@ def final_report(cc_list: list[str],
     print('-' * 20)
     plural = 's' if counter[DownloadStatus.OK] != 1 else ''
     if counter[DownloadStatus.NOT_FOUND]:
-        print(f'{counter[DownloadStatus.NOT_FOUND:3} not found.')
+        print(f'{counter[DownloadStatus.NOT_FOUND]:3} not found.')
     elif counter[DownloadStatus.ERROR]:
         plural = 's' if counter[DownloadStatus.ERROR] != 1 else ''
         print(f'{counter[DownloadStatus.ERROR]:3} error{plural}.')
@@ -104,7 +104,7 @@ def process_args(default_concur_req):
         default=sys.maxsize)
     parser.add_argument(
         '-m', '--max_req', metavar='CONCURRENT', type=int,
-        default=defualt_concur_req,
+        default=default_concur_req,
         help=f'maximum concurrent requests (default={default_concur_req})')
     parser.add_argument(
         '-s', '--server', metavar='LABEL', default=DEFAULT_SERVER,
@@ -118,7 +118,7 @@ def process_args(default_concur_req):
         print('*** Usage error: --max_req CONCURRENT must be >=1')
         parser.print_usage()
         sys.exit(2)
-    args.server = args.server.upeer()
+    args.server = args.server.upper()
     if args.server not in SERVERS:
         print(f'*** Usage rror: --server LABEL'
               f'must be one of {server_options}')
