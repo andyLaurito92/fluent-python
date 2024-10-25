@@ -58,27 +58,27 @@ async def supervisor(cc_list: list[str],
         to_do_iter = asyncio.as_completed(to_do)
         if not verbose:
             to_do_iter = tqdm.tqdm(to_do_iter, total=len(cc_list))
-            error: httpx.HTTPError | None = None
-            for coro in to_do_iter:
-                try:
-                    status = await coro
-                except httpx.HTTPStatusError as exc:
-                    error_msg = 'HTTP error {resp.status_code} - {resp.reason_phrase}'
-                    error_msg = error_msg.format(resp=exc.response)
-                    error = exc
-                except httpx.RequestError as exc:
-                    error_msg = f'{exc} {type(exc)}'.strip()
-                    error = exc
-                except KeyboardInterrupt:
-                    break
+        error: httpx.HTTPError | None = None
+        for coro in to_do_iter:
+            try:
+                status = await coro
+            except httpx.HTTPStatusError as exc:
+                error_msg = 'HTTP error {resp.status_code} - {resp.reason_phrase}'
+                error_msg = error_msg.format(resp=exc.response)
+                error = exc
+            except httpx.RequestError as exc:
+                error_msg = f'{exc} {type(exc)}'.strip()
+                error = exc
+            except KeyboardInterrupt:
+                break
 
-                if error:
-                    status = DownloadStatus.ERROR
-                    if verbose:
-                        url = str(error.request.url)
-                        cc = Path(url).stem.upper()
-                        print(f'{cc} error: {error_msg}')
-                    counter[status] += 1
+            if error:
+                status = DownloadStatus.ERROR
+                if verbose:
+                    url = str(error.request.url)
+                    cc = Path(url).stem.upper()
+                    print(f'{cc} error: {error_msg}')
+                counter[status] += 1
         return counter
 
 
