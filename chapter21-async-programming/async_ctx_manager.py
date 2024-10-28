@@ -9,8 +9,10 @@ stats: defaultdict[str, int] = defaultdict(lambda: 0)
 
 def download_webpage(url: str) -> Iterator[str]:
     response = requests.get(url, stream=True)
-    #yield from response.iter_content(chunk_size=2)
-    return response.text
+    # Reponse from requests allows to iterate over the
+    # response in chunks. The below line returns a generator
+    yield from response.iter_content(chunk_size=2)
+    #return response.text
     
 
 def update_stats(url: str) -> None:
@@ -25,3 +27,15 @@ async def web_page(url):
         None, download_webpage, url)
     yield data
     await loop.run_in_executor(None, update_stats, url)
+
+
+# Usage example
+
+async def main():
+    async with web_page('https://google.com') as web_page_gen_res:
+        for chunk in web_page_gen_res:
+            print(chunk)
+   
+
+if __name__ == '__main__':
+    asyncio.run(main())
