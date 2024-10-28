@@ -25,5 +25,7 @@ async def multi_probe(domains: Iterable[str]) -> AsyncIterator[Result]:
     loop = asyncio.get_running_loop()
     coros = [probe(domain, loop) for domain in domains]
     for coro in asyncio.as_completed(coros):
+        # Can also be rewritten as:
+        # yield await coro
         result = await coro
         yield result
