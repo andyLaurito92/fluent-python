@@ -13,3 +13,10 @@ The main difference between lightweight and heavyweight threads is that it is th
 Event-driven networking engine that uses asyncio
 
 https://twisted.org/
+
+
+You can run a python's async console since Python 3.8 by running:
+
+``` 
+python -m asyncio
+```
