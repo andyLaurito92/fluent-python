@@ -9,7 +9,7 @@ class FrozenJSON:
 
     def __getattr__(self, name):
         try:
-            return getattr(self.__data, name)
+            return getattr(self.__data, name) # Access dictionary attributes/methods
         except AttributeError:
             try:
                 value = self.__data[name]
@@ -20,6 +20,7 @@ class FrozenJSON:
                 return FrozenJSON.build(value)
 
     def __dir__(self):
+        """Supports dir() built-in. Returns the keys of this dictionary """
         return self.__data.keys()
 
     @classmethod
