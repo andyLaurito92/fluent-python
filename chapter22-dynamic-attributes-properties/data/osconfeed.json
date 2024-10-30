@@ -1,12 +1,7 @@
-
-
-
-
-
-  { "Schedule": {
+{
+  "Schedule": {
     "conferences": [{"serial": 115 }],
     "events": [
-
       {
         "serial": 33451,
         "name": "Migrating to the Web Using Dart and Polymer - A Guide for Legacy OOP Developers",
@@ -13300,8 +13295,5 @@
       }
 
     ]
-  }}
-
-
-
-
+  }
+}
