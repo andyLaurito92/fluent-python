@@ -1,11 +1,18 @@
 from collections import abc
+import keyword
 
 class FrozenJSON:
     """ A read-only facade for navigating a JSON-like
     object using attribute notation """
 
     def __init__(self, mapping):
-        self.__data = dict(mapping)
+        self.__data = {}
+        for key, val in mapping.items():
+            if keyword.iskeyword(key):
+                key = key + '_'
+            if not str.isidentifier(key):
+                raise KeyError(f"Cannot convert {key} in a valid dictionary key. Please clean up the data before converting it")
+            self.__data[key] = val
 
     def __getattr__(self, name):
         try:

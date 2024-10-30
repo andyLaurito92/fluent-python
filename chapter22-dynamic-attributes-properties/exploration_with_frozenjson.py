@@ -10,3 +10,5 @@ json attributes as keys instead of having to access them as dictionary keys
 frozenjson = FrozenJSON(data)
 
 frozenjson.Schedule.events[40].name
+
+dir(frozenjson.Schedule)
