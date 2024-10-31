@@ -1,4 +1,5 @@
 from frozenjson import FrozenJSON
+from frozenjson2 import FrozenJSON2
 from data_loader import data
 
 
