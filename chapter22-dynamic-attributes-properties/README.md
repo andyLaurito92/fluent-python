@@ -4,6 +4,7 @@ Interesting references of this chapter:
 2. Libraries for accessing key in dictionaries as attributes
     - https://pypi.org/project/attrdict/
 	- https://github.com/mewwts/addict
+3. [Page](https://github.com/ActiveState/code/tree/master/recipes/Python) which contains Python receipes (code snippets useful for different cases)
 	
 	
 Note about `__init__` and `__new__`:
