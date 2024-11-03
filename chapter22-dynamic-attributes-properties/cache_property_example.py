@@ -6,7 +6,9 @@ cached is the VALUE, which is a list, which can be mutated. The VALUE (
 which is the list) doesn't chage. What it changes is the content of it
 
 
-cached_property decorator creates a nonoverriding descriptor
+cached_property decorator creates a nonoverriding descriptor. See its
+implementation here:
+https://github.com/python/cpython/blob/e6d0107e13ed957109e79b796984d3d026a8660d/Lib/functools.py#L926
 
 The cached_property decorator only runs on lookups and only when an
 attribute of the same name doesn't exist
