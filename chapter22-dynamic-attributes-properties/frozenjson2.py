@@ -35,7 +35,7 @@ class FrozenJSON2:
                 # See docs https://docs.python.org/3/tutorial/errors.html#exception-chaining
                 raise AttributeError('Mapping doesn\'t have key ', name) from None
             else:
-                return FrozenJSON.build(value)
+                return FrozenJSON2(value)
 
     def __dir__(self):
         """Supports dir() built-in. Returns the keys of this dictionary """
