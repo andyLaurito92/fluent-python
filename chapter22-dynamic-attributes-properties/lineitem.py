@@ -35,4 +35,99 @@ class LineItem1:
             raise ValueError('value must be > 0')
 
 
+item0 = LineItem0("some cool description", 30, 23.3)
+
 item1 = LineItem1("some cool description", 30, 23.3)
+
+vars(item1) # get the variables from this object
+
+
+"""
+Properties are always class attributes, but they actually manage attribute
+access in the instances of the class
+"""
+
+
+class Example:
+    class_attribute = "something cool"
+
+    def __init__(self) -> None:
+        self.text = "an instance attribute"
+
+    @property
+    def myprop(self) -> str:
+        return "hey yo!"
+
+    @property
+    def text(self) -> str:
+        return self.__text
+
+    @text.setter
+    def text(self, val: str) -> None:
+        if len(val) == 0:
+            raise ValueError('No empty strings allowed') 
+        self.__text = val
+
+
+myexample = Example()
+# Only displays the instance attribute
+print(vars(myexample))
+
+# However we can call the class attribute
+print(myexample.class_attribute)
+
+myexample.class_attribute = "shadowing class attribute"
+
+print(myexample.class_attribute)
+vars(myexample)
+
+# The class attribute remains the same as before, we just
+# shadowed the class attribute
+print(Example.class_attribute)
+
+
+"""
+With the example above, let's remember that properties are class attributes.
+What happens if we tried to override the text attribute on the instance?
+"""
+
+print(Example.text)
+
+print(myexample.text)
+
+myexample.__dict__['_Example__text'] = "hacking the matrix!"
+
+print(myexample.text)
+
+print(vars(myexample))
+
+print(myexample.myprop)
+print(Example.myprop)
+
+try:
+    myexample.myprop = "overriding something that I can't override"
+except AttributeError as e:
+    print(e)
+
+myexample.__dict__['myprop'] = "You can't with me"
+
+# This demonstrates that overriding a property in an instance doesn't
+# override the property getter. The property is not shadowed by the instance
+# attribute
+print(myexample.myprop)
+print(vars(myexample))
+print(Example.myprop)
+
+# For overriding its value, you need to change the property instance
+# in the class
+Example.myprop = 'overriding the property instance'
+
+# Because the class doesn't have myprop property anymore, now we can
+# get the overrided value
+print(myexample.myprop)
+
+
+# We can add properties on runtime that override the resolution of that
+# attribute in all instances of the class
+
+myexample2 = Example()
