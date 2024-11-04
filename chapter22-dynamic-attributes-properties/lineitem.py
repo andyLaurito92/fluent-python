@@ -140,12 +140,14 @@ except AttributeError as e:
 myexample2.property_on_the_fly = "created only in myexample2 instance"
 print(myexample2.property_on_the_fly)
 
-Example.property_on_the_fly = property(lambda x: "I was created on the fly")
+Example.property_on_the_fly = property(lambda x: "I was created on the fly", doc="Some cool documentation here")
 
 # Property overrides properties of instances
 print(myexample2.property_on_the_fly)
 print(myexample.property_on_the_fly)
 
+# Help extracts the documentation from the __doc__ special method
+print(help(Example.property_on_the_fly))
 
 del Example.property_on_the_fly
 
