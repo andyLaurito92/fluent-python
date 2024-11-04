@@ -131,3 +131,27 @@ print(myexample.myprop)
 # attribute in all instances of the class
 
 myexample2 = Example()
+
+try: 
+    print(myexample2.property_on_the_fly)
+except AttributeError as e:
+    print(e)
+
+myexample2.property_on_the_fly = "created only in myexample2 instance"
+print(myexample2.property_on_the_fly)
+
+Example.property_on_the_fly = property(lambda x: "I was created on the fly")
+
+# Property overrides properties of instances
+print(myexample2.property_on_the_fly)
+print(myexample.property_on_the_fly)
+
+
+del Example.property_on_the_fly
+
+print(myexample2.property_on_the_fly)
+
+try:
+    print(myexample.property_on_the_fly)
+except AttributeError as e:
+    print("Back to no having property_on_the_fly")
