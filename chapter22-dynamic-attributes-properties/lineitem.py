@@ -196,6 +196,8 @@ class LineItem3:
 item3 = LineItem3("some cool description", 30, 23.3)
 
 
+# See more about these methods here
+# https://docs.python.org/3/reference/datamodel.html#customizing-attribute-access
 class House:
     def __init__(self):
         self.name = "The house"
