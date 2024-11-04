@@ -155,3 +155,11 @@ try:
     print(myexample.property_on_the_fly)
 except AttributeError as e:
     print("Back to no having property_on_the_fly")
+
+
+"""
+The moral in this last example is this: When doing obj.my_property, the search starts
+in the class of obj, obj.__class__.my_property, and not in the instance itself! Only
+when the class doesn't have defined the property in it, it fallbacks to search in
+the instance
+"""
