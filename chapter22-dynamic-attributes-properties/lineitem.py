@@ -194,3 +194,30 @@ class LineItem3:
 
 
 item3 = LineItem3("some cool description", 30, 23.3)
+
+
+class House:
+    def __init__(self):
+        self.name = "The house"
+
+    def __delattr__(self, name):
+        print("Deleting attribute ", name)
+        super().__delattr__(name)
+
+    def __dir__(self):
+        return "Some super cool documentation"
+
+    def __getattr__(self, name):
+        print(f"Attribute {name} was not found, let's define it!")
+        self.__dict__[name] = "Here you go"
+
+    def __getattribute__(self, name):
+        print(name, " attribute was found :)")
+        return super().__getattribute__(name)
+
+    def __setattr__(self, name, value):
+        print("Setting attribute ", name, "To ", value)
+        super().__setattr__(name, value)
+
+
+myhouse = House()
