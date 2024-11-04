@@ -165,3 +165,32 @@ in the class of obj, obj.__class__.my_property, and not in the instance itself! 
 when the class doesn't have defined the property in it, it fallbacks to search in
 the instance
 """
+
+# Factory method for building quantity attributes
+def quantity(storage_name):
+    def qty_getter(instance):
+        return instance.__dict__[storage_name]
+
+    def qty_setter(instance, value):
+        if value > 0:
+            instance.__dict__[storage_name] = value
+        else:
+            raise ValueError('value must be > 0')
+
+    return property(qty_getter, qty_setter)
+
+
+class LineItem3:
+    weight = quantity('weight')
+    price = quantity('price')
+
+    def __init__(self, description, weight, price):
+        self.description = description
+        self.weight = weight
+        self.price = price
+
+    def subtotal(self):
+        return self.weight * self.price
+
+
+item3 = LineItem3("some cool description", 30, 23.3)
