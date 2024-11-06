@@ -12,8 +12,13 @@ class Directory:
         self.dirname = dirname
         
 
+"""
+In this example, we show that the lookup is being done
+dynamically
+"""
 current_dir = Directory('chapter14-inheritance')
 print(current_dir.size)
 
 current_dir = Directory('chapter03-dictionaries')
 print(current_dir.size)
+
