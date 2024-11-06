@@ -20,11 +20,26 @@ class A:
 
 mya = A()
 
-print(mya.x)
+print(mya.x) # Here, the lookup finds the value of x in __dic__
 
+# Here, the dot operator finds a descriptor instance, recognized by its
+# __get__ method.
 print(mya.y)
+
+# Note: The value 10 is not stored in neither the class dictionary nor
+# the instance dictionary
+
+print(vars(mya))
+
+print(vars(A))
+
+del mya
+
+print(vars(A))
 
 
 """
 How does the above example works?
 """
+
+
