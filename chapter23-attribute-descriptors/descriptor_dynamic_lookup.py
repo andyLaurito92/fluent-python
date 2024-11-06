@@ -22,3 +22,14 @@ print(current_dir.size)
 current_dir = Directory('chapter03-dictionaries')
 print(current_dir.size)
 
+
+
+"""
+What are the arguments of method __get__  representing?
+
+self -> Is the instance of this directory size
+obj -> instance of directory
+objtype -> class Directory
+"""
+
+
