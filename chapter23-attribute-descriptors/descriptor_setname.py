@@ -39,3 +39,11 @@ andy = Person("Andres", 32)
 print(andy.age)
 
 andy.age -= 1 # I want to become younger :)
+
+# private attributes are defined in the instance
+print(vars(andy))
+
+# Given that a descriptor is a class, we can ask for
+# it's variables! -> Remember that attributes are defined
+# in the class
+print(vars(vars(Person)['age']))
