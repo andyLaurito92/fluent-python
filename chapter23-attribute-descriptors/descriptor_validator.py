@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 logging.basicConfig(level=logging.INFO)
 
 class Validator(ABC):
-    def __set_name__(self, name):
+    def __set_name__(self, owner, name):
         self.public_name = name
         self.private_name = '_' + name
 
@@ -52,4 +52,9 @@ class Person:
         self.member = member
 
 
-matusalen = Person(101, 'Andy')
+matusalen = Person(30, 'Andy')
+
+try: 
+    invalid_person = Person(101, 'Justin')
+except ValueError as e:
+    print(e)
