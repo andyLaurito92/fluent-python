@@ -33,13 +33,35 @@ the data descriptor takes precedence.
 If an instance's dictionary has an entry with the same name as a non-data descriptor (get),
 the dictionary entry takes precedence
 
-def attribute_lookup(self, name):
-    if name in self.__dict__:
-	return self.__dict__[name]
-    else:
-	if name in type(self).__dict__ and type(self).__dict__[name] is a descriptor:
-	descr = type(self).__dict__[name]
-	descr.__get__(name)
+def find_name_in_mro(cls, name, default):
+    "Emulate _PyType_Lookup() in Objects/typeobject.c"
+    for base in cls.__mro__:
+        if name in vars(base):
+            return vars(base)[name]
+    return default
+
+def object_getattribute(obj, name):
+    "Emulate PyObject_GenericGetAttr() in Objects/object.c"
+    null = object()
+    objtype = type(obj)
+    cls_var = find_name_in_mro(objtype, name, null)
+    descr_get = getattr(type(cls_var), '__get__', null)
+    if descr_get is not null:
+        if (hasattr(type(cls_var), '__set__')
+            or hasattr(type(cls_var), '__delete__')):
+            return descr_get(cls_var, obj, objtype)     # data descriptor
+    if hasattr(obj, '__dict__') and name in vars(obj):
+        return vars(obj)[name]                          # instance variable
+    if descr_get is not null:
+        return descr_get(cls_var, obj, objtype)         # non-data descriptor
+    if cls_var is not null:
+        return cls_var                                  # class variable
+    raise AttributeError(name)
 
 To make a read-only data descriptor, define both __get__() and __set__() with the __set__() raising an AttributeError when called. Defining the __set__() method with an exception raising placeholder is enough to make it a data descriptor.
+
+Instance Lookup:
+
+Instance lookup scans through a chain of namespaces giving data descriptors the highest priority, followed by instance variables, then non-data descriptors, then class variables, and lastly __getattr__() if it is provided.
+If a descriptor is found for a.x, then it is invoked with: desc.__get__(a, type(a)).
 """
