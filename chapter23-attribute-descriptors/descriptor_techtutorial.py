@@ -64,4 +64,7 @@ Instance Lookup:
 
 Instance lookup scans through a chain of namespaces giving data descriptors the highest priority, followed by instance variables, then non-data descriptors, then class variables, and lastly __getattr__() if it is provided.
 If a descriptor is found for a.x, then it is invoked with: desc.__get__(a, type(a)).
+
+Important: Review invocation from [class|instance|super] for a better explanation on attribute resolution from
+each of these objects
 """
