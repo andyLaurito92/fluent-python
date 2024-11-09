@@ -92,3 +92,43 @@ print(obj.over_no_get)
 # In this last case, because we don't have the __get__ method
 # in the descriptor, therefore we can get the value we setup
 # by directly writing to the obj__dict__
+
+print("======== Non Overriding descriptor ========")
+
+"""
+A descriptor that does not implement __set__ is a nonoverriding descriptor.
+Setting an instance attribute with the same name will shadow the descriptor.
+
+Methods and @functools.cached_property are implemented as non overriding
+descriptors
+"""
+
+obj.non_over
+
+obj.non_over = "something"
+
+print(obj.non_over)
+
+Managed.non_over
+
+print("Deleting instance attribute")
+del obj.non_over
+
+obj.non_over
+
+
+"""
+Note that we can perfectly monkey-patch class attributes as shown
+in the following example
+"""
+
+Managed.over = 3
+
+print(Managed.over) # Descriptor is lost!
+
+"""
+The above shows that even when the descriptor has method __set__
+implemented, we can still override the class attribute. This is bc
+if you want to control attributes of a class, you need to attach a
+descriptor to the class of the class --> The metaclass!
+"""
