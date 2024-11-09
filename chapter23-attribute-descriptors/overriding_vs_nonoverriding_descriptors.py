@@ -49,6 +49,8 @@ class Managed:
         print(f'-> Managed.span({display(self)})')
 
 
+# Overriding descriptor
+
 obj = Managed()
 
 obj.over
@@ -64,3 +66,24 @@ obj.over
 # overrides the lookup of the attribute triggering
 # obj.over.__get__(descriptor, obj, None)
 # That's why we Luciano calls it "Overriding descriptor"
+
+
+# Overriding descriptor without __get__
+
+print("======== Overriding descriptor without __get__ ========")
+obj.over_no_get
+
+print(vars(obj))
+print(obj.over_no_get) # Get the descriptor instance
+obj.over_no_get = 3
+
+print(vars(obj))
+print(obj.over_no_get) # get the descriptor instance
+
+obj.__dict__['over_no_get'] = "something"
+
+print(obj.over_no_get) # get the attribute value in obj.__dict__
+
+# In this last case, because we don't have the __get__ method
+# in the descriptor, therefore we can get the value we setup
+# by directly writing to the obj__dict__
