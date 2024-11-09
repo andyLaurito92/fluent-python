@@ -132,3 +132,7 @@ implemented, we can still override the class attribute. This is bc
 if you want to control attributes of a class, you need to attach a
 descriptor to the class of the class --> The metaclass!
 """
+
+print(obj.spam) # Retrieves a bound method
+
+print(Managed.spam) # retrieves a function
