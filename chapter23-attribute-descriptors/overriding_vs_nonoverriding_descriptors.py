@@ -47,3 +47,20 @@ class Managed:
 
     def spam(self):
         print(f'-> Managed.span({display(self)})')
+
+
+obj = Managed()
+
+obj.over
+obj.over = 7
+
+print(vars(obj))
+obj.__dict__['over'] = 8
+
+print(vars(obj))
+obj.over
+# Doesn't matter that we have an attribute in the
+# instance of obj called "over", the descriptor
+# overrides the lookup of the attribute triggering
+# obj.over.__get__(descriptor, obj, None)
+# That's why we Luciano calls it "Overriding descriptor"
