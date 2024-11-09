@@ -1,8 +1,9 @@
 import logging
+from abc import ABC, abstractmethod
 
 logging.basicConfig(level=logging.INFO)
 
-class Quantity:
+class Validator(ABC):
     def __set_name__(self, owner, name):
         self.private_name = '_' + name
         
@@ -10,15 +11,20 @@ class Quantity:
         return getattr(obj, self.private_name)
 
     def __set__(self, obj, value):
+        self.validate(value)
+        setattr(obj, self.private_name, value)
+
+    @abstractmethod
+    def validate(self, value):
+        raise NotImplementedError
+
+class Quantity(Validator):
+    def validate(self, value):
         if not isinstance(value, (int, float)):
             raise ValueError("Value should be a number")
         elif value < 0:
             raise ValueError("Value cannot be less than 0")
-            
-        setattr(obj, self.private_name, value)
-                    
 
-    
 class LineItem:
     weight = Quantity()
     price = Quantity()
