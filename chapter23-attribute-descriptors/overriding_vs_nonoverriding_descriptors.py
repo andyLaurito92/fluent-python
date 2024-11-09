@@ -84,6 +84,11 @@ obj.__dict__['over_no_get'] = "something"
 
 print(obj.over_no_get) # get the attribute value in obj.__dict__
 
+obj.over_no_get = "I will overwrite what you did!"
+
+print(obj.over_no_get)
+# Setup was called, but bc __set__ is not doing anything, we still have the old value
+
 # In this last case, because we don't have the __get__ method
 # in the descriptor, therefore we can get the value we setup
 # by directly writing to the obj__dict__
