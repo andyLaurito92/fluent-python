@@ -8,6 +8,8 @@ class Validator(ABC):
         self.private_name = '_' + name
         
     def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
         return getattr(obj, self.private_name)
 
     def __set__(self, obj, value):
