@@ -8,7 +8,7 @@ class Validator(ABC):
         self.private_name = '_' + name
         
     def __get__(self, obj, objtype=None):
-        if obj is None:
+        if obj is None: # If obj is None, the attribute is being acceded from the class
             return self
         return getattr(obj, self.private_name)
 
