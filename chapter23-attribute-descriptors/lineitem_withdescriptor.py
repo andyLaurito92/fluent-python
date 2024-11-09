@@ -25,7 +25,13 @@ class Quantity(Validator):
         elif value < 0:
             raise ValueError("Value cannot be less than 0")
 
+class NotEmptyString(Validator):
+    def validate(self, value):
+        if len(value) == 0:
+            raise ValueError("Empty strings are not allowed")
+
 class LineItem:
+    description = NotEmptyString()
     weight = Quantity()
     price = Quantity()
 
@@ -43,6 +49,11 @@ try:
 except ValueError as e:
     logging.info("Error raised " + str(e))
 
+
+try:
+    empty_string = LineItem('', 30, 20)
+except ValueError as e:
+    logging.info("Error raised " + str(e))
 
 bananas = LineItem("bananas", 3, 8)
 
