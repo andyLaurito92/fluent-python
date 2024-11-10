@@ -70,4 +70,59 @@ print(andy.__class__)
 """
 type is a class, and it's the built-in class of all classes in Python
 Type is a metaclass (class of classes)
+
+
+type(andy) what it does actually is return andy.__class__
+
+type is a class that creates a new class when invoked with 3 arguments
 """
+
+class Hibrid(Student, Employee):
+    working_hours = 30 # Defaults to part-time
+    class_hours = 20
+
+    def hours_studying_working(self):
+        return self.working_hours + self.class_hours
+
+
+"""
+The above is equivalent of doing the following
+"""
+
+runtime_hibrid = type('NewHibrid', (Student, Employee), 
+                      {'working_hours': 30, 'class_hours': 20,
+                       'hours_studying_working': lambda self: self.working_hours + self.class_hours})
+
+
+new_hibrid = runtime_hibrid('studentid')
+
+new_hibrid.hours_studying_working()
+
+
+"""
+With the above, we can build a factory class. Something super similar is done
+by collections.namedtuple, typing.NamedTuple and dataclass
+"""
+
+def dog_factory():
+    def dog_init(self, name, weight, owner):
+        self.name = name
+        self.weight = weight
+        self.owner = owner
+
+    new_dog_instance = type('Dog', (),
+                            {'__init__': dog_init})
+
+    def new_dog(name, weight, owner):
+        return new_dog_instance(name, weight, owner)
+        
+    return new_dog
+
+
+dog_creator = dog_factory()
+
+mila = dog_creator('Mila', 12, 'Andy')
+firulais = dog_creator('Firulais', 10, 'Home')
+
+print(type(mila))
+print((mila.owner, mila.weight, mila.name))
