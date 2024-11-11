@@ -126,3 +126,35 @@ firulais = dog_creator('Firulais', 10, 'Home')
 
 print(type(mila))
 print((mila.owner, mila.weight, mila.name))
+
+
+"""
+The above can be refactor to abstract the creation of a record to a general use case,
+pretty similar to what collection.namedtuple, typing.NamedTuple or dataclass do
+"""
+
+def record_factory(clssname, *args):
+    attribute_names = tuple(args)
+    def init(self, *args):
+        for attr_name, val in zip(attribute_names, args):
+            setattr(self, attr_name, val)
+
+    def __repr__(self):
+        repr_str = f'{clssname}('
+        repr_str += ', '.join(f'{key}={value}' for key, value
+                              in self.__dict__.items())
+        repr_str += ')'
+        return repr_str
+
+    return type(clssname, (), {'__init__': init, '__repr__': __repr__})
+
+
+Dog = record_factory('Dog', 'name', 'weight', 'owner')
+
+rex = Dog('Rex', 5, 'Bob')
+
+print(rex.owner, rex.weight, rex.name)
+
+print(rex.__dict__)
+
+print(rex)
