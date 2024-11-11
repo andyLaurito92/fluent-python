@@ -16,3 +16,6 @@ While there are many possible ways to use a metaclass, the vast majority of use 
 
 Note: Metaclasses should not be something used for application code. However, if you're writing a 
 framework, this might make sense
+
+
+You can find the implementation of namedtuple as a good example on using type [here](https://github.com/python/cpython/blob/3.9/Lib/collections/__init__.py)
