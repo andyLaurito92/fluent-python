@@ -146,7 +146,12 @@ def record_factory(clssname, *args):
         repr_str += ')'
         return repr_str
 
-    return type(clssname, (), {'__init__': init, '__repr__': __repr__})
+    clss_attrs = dict(
+        __init__=init,
+        __repr__=__repr__
+        )
+
+    return type(clssname, (), clss_attrs)
 
 
 Dog = record_factory('Dog', 'name', 'weight', 'owner')
