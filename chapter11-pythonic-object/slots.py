@@ -61,3 +61,25 @@ coloredpixel.color = 'green'
 # As oppose to a class defining __slots__, we do can assign
 # new attributes to the instnace
 print(vars(coloredpixel))
+
+
+"""
+The moral is this: If you ColorPixel to behave as Pixel, meaning, don't
+allow for new attributes to be set and to disallow the __dict__, you need
+to define __slots__ = ()
+"""
+
+class ColorPixel2:
+    __slots__ = ('color')
+
+
+colorpixel2 = ColorPixel2()
+
+colorpixel2.color = 'red'
+
+print(colorpixel2.color)
+
+try:
+    colorpixel2.__dict__
+except AttributeError as e:
+    print(e)
