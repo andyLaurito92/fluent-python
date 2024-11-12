@@ -17,3 +17,5 @@ runs all the top-level code of a module
 Further imports of the same module will use a cache, and then th eonly effect will be
 binding the imported objects to names in the client module
 """
+
+import builderlib
