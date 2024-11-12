@@ -1,13 +1,24 @@
 from typing import get_type_hints
+import logging
 """
 TODO: Implement a class decorators that acts as
 class define din checkdeco.py
 """
 
+logging.basicConfig(level=logging.INFO)
+
 class TypedField:
     def __init__(self, name, constructor):
         self.name = name
         self.constructor = constructor
+
+    def __get__(self, obj, objtype):
+        if obj is None:
+            return self
+        else:
+            if obj.__dict__.get(self.name) is None:
+                setattr(obj, self.name, ...)
+            return obj.__dict__[self.name]
 
     def __set__(self, instance, value):
         if value is ...:
@@ -23,6 +34,23 @@ def checked(theclass):
     for field, typeclss in fields.items():
         typedfield = TypedField(field, typeclss)
         setattr(theclass, field, typedfield)
+
+    old_init = theclass.__init__
+    def init(self, *args, **kwargs):
+        old_init(self, *args, **kwargs)
+
+        for key,val in kwargs.items():
+            if not key in fields.keys():
+                logging.info(f'Key {key} is not a typed attribute. Will set it up as normal attribute')
+            setattr(self, key, val)
+
+
+    def repr(self):
+        attrs = ', '.join(f'{field}={getattr(self, field)}({val.__name__})' for field, val in fields.items())
+        return f'{theclass.__name__}({attrs})'
+
+    theclass.__init__ = init
+    theclass.__repr__ = repr
             
     return theclass
 
@@ -32,8 +60,13 @@ class Student:
     name: str
     age: int
     studentid: str
+    university: str
 
-andy = Student()
+    def __init__(self, *args, **kwargs):
+        print("hello")
+
+andy = Student(name="Andy", age=32,
+               studentid='xdd', university_typo="Opps!")
 
 andy.name = "Andy"
 try:
