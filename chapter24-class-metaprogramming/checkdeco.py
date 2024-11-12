@@ -1,8 +1,12 @@
 from typing import get_type_hints
 import logging
 """
-TODO: Implement a class decorators that acts as
-class define din checkdeco.py
+In this code snippet I implement a class decorator that
+type checks attributes in the decorated class.
+
+The real class to use for application code is dataclass,
+you can find the cpython implementation here:
+https://github.com/python/cpython/blob/3.9/Lib/dataclasses.py
 """
 
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +32,7 @@ class TypedField:
         value = self.constructor(value)
         instance.__dict__[self.name] = value
 
-def checked(theclass):
+def checked(theclass: type) -> type: # classes are instances of type
     fields = get_type_hints(theclass)
 
     for field, typeclss in fields.items():
