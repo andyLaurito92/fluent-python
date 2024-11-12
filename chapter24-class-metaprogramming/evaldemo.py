@@ -18,4 +18,42 @@ Further imports of the same module will use a cache, and then th eonly effect wi
 binding the imported objects to names in the client module
 """
 
-import builderlib
+#import builderlib
+
+from builderlib import Builder, deco, Descriptor
+
+print('# evaldemo module start')
+
+@deco
+class Klass(Builder):
+    print('# Klass body')
+
+    attr = Descriptor()
+
+    def __init__(self):
+        super().__init__()
+        print(f'# Klass.__init__({self!r})')
+
+
+    def __repr__(self):
+        return '<Klass instance>'
+
+
+def main():
+    obj = Klass()
+    obj.method_a()
+    obj.method_b()
+    obj.attr = 999
+
+
+if __name__ == '__main__':
+    main()
+
+#main()
+print('# evaldemo module end')
+
+
+"""
+The steps for creating a class object are documented here:
+https://docs.python.org/3/reference/datamodel.html#creating-the-class-object
+"""
