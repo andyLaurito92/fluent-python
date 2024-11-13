@@ -37,9 +37,12 @@ class Scheme(Lisp):
         self.num_users = num_users
 
 
-myscheme = Scheme(10)
+# From https://www.scheme.org/
+scheme_mit = Scheme(10)
+scheme_bigloo = Scheme(30)
+scheme_chicken = Scheme(5)
 
-print(myscheme)
+print(myscheme_mit)
 
 """
 To process class Scheme, Python calls

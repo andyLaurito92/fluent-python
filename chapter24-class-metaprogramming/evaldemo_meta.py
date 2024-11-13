@@ -23,3 +23,4 @@ obj.method_b()
 obj.method_c()
 obj.attr = 999
 
+print("# evaldemo_meta module end")
