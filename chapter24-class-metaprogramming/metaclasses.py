@@ -1,8 +1,5 @@
 class MetaBunch(type):
     def __new__(meta_cls, cls_name, bases, cls_dict):
-        print('ProgrammingLanguage.__new__', meta_cls, cls_name, bases, cls_dict)
-        print(type(meta_cls))
-
         defaults = {}
 
         def __init__(self, **kwargs):
@@ -28,9 +25,7 @@ class MetaBunch(type):
             else:
                 new_dict['__slots__'].append(name)
                 defaults[name] = value
-        res = super().__new__(meta_cls, cls_name, bases, new_dict)
-        print(res)
-        return res
+        return super().__new__(meta_cls, cls_name, bases, new_dict)
 
 
 class Bunch(metaclass=MetaBunch):
